@@ -263,6 +263,14 @@ public class Game {
 
 
     /*
+     * Returns the card at index i in the draw pile.
+     */
+    public Card getDrawPileCard(int i) {
+        return drawPile.get(i);
+    }
+
+
+    /*
      * Sets the state.
      */
     public void setState(GameState gs, Object val) {

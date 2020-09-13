@@ -33,4 +33,5 @@ public class GameSetupTest {
         assertEquals(NUM_CARDS_PER_PLAYER, p1.deckSize());
         assertEquals(NUM_CARDS_PER_PLAYER, p2.deckSize());
     }
+
 }

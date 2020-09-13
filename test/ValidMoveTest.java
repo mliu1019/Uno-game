@@ -1,6 +1,4 @@
-import CardPackage.Card;
-import CardPackage.NumberCard;
-import CardPackage.WildCard;
+import CardPackage.*;
 import GamePackage.*;
 import UtilPackage.Uno;
 
@@ -36,7 +34,7 @@ public class ValidMoveTest {
     }
 
     @Test
-    public void testValidMove() {
+    public void testValidMoveNumber() {
         game.setState(Game.GameState.nextPlayer, 0);
         game.setState(Game.GameState.nextColor, Card.Color.RED);
 
@@ -45,6 +43,39 @@ public class ValidMoveTest {
 
         assertThrows(Uno.IllegalHandException.class, ()-> {
             p1.playCard(0);
+        });
+
+        game.finishTurn();
+        assertEquals(Card.Color.RED, game.getState(Game.GameState.nextColor));
+    }
+
+    @Test
+    public void testValidMoveEffect() {
+        game.setState(Game.GameState.nextPlayer, 0);
+        game.setState(Game.GameState.nextColor, Card.Color.RED);
+
+        p1.addCardsToHand(new SkipCard(Card.Color.GREEN));
+        assertFalse(p1.isValidMove(0));
+
+        assertThrows(Uno.IllegalHandException.class, ()-> {
+            p1.playCard(0);
+        });
+
+        game.finishTurn();
+        assertEquals(Card.Color.RED, game.getState(Game.GameState.nextColor));
+    }
+
+    @Test
+    public void testValidMoveBonus() {
+        game.setState(Game.GameState.nextPlayer, 0);
+        game.setState(Game.GameState.nextColor, Card.Color.RED);
+
+        p1.addCardsToHand(new SkipCard(Card.Color.RED));
+        p1.addCardsToHand(new Wild4Card());
+        assertFalse(p1.isValidMove(1));
+
+        assertThrows(Uno.IllegalHandException.class, ()-> {
+            p1.playCard(1);
         });
 
         game.finishTurn();
