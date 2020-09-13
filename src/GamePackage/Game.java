@@ -107,16 +107,38 @@ public class Game {
         }
         Player p = players.get((int)getState(GameState.nextPlayer));
 
-        int cardToDraw = (int) getState(GameState.nextDraw);
+        int cardToDraw = (int)getState(GameState.nextDraw);
         while (cardToDraw -- > 0) {
             p.draw_card();
+            checkPile();
         }
 
         if (!getState(GameState.shouldSkip).equals(true)) {
             p.make_turn();
+            checkEnding(p);
+            checkPile();
         }
 
         finishTurn();
+    }
+
+    public void checkEnding(Player p) {
+        if (p.deckSize() == 0) {
+            setNextState(GameState.shouldEnd, true);
+        }
+    }
+
+    public void checkPile() {
+        if (drawPile.size() == 0) {
+            Card topCard = discardPile.get(discardPile.size()-1);
+            discardPile.remove(discardPile.size()-1);
+            for (int i=0; i<discardPile.size(); ++i) {
+                Card temp = discardPile.remove(0);
+                drawPile.add(temp);
+            }
+            Collections.shuffle(drawPile);
+            discardPile.add(topCard);
+        }
     }
 
     public void finishTurn() {
