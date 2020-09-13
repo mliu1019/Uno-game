@@ -14,7 +14,6 @@ public class WildCard extends Card {
 
     @Override
     public void causeEffect(Game g) {
-        g.setNextState(Game.GameState.nextDraw, 1);
         g.setNextState(Game.GameState.nextColor, color);
         color = Color.NONE;
     }
