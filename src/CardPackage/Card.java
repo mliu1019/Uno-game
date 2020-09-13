@@ -47,6 +47,9 @@ public class Card {
         effect = e;
     }
 
+    /*
+     * Abstract method.
+     */
     public void causeEffect(Game g) {
 
     }

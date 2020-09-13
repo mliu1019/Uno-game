@@ -8,12 +8,12 @@ import static org.junit.Assert.*;
 
 public class CardTest {
     private Game game;
-    private Player p1;
+    private Player p;
 
     @Before
     public void setUp() {
         game = new Game();
-        p1 = new Player(game);
+        p = new Player(game);
     }
 
     @Test
@@ -21,15 +21,15 @@ public class CardTest {
         game.setState(Game.GameState.nextNumber, 7);
         game.setState(Game.GameState.nextColor, Card.Color.RED);
 
-        p1.addCardToHand(new NumberCard(2, Card.Color.RED));
-        p1.addCardToHand(new NumberCard(2, Card.Color.BLUE));
+        p.addCardToHand(new NumberCard(2, Card.Color.RED));
+        p.addCardToHand(new NumberCard(2, Card.Color.BLUE));
 
-        p1.playCard(0);
+        p.playCard(0);
         assertEquals(Card.Color.RED, game.getState(Game.GameState.nextColor));
         assertEquals(2, game.getState(Game.GameState.nextNumber));
         assertEquals(Card.Effect.NONE, game.getState(Game.GameState.nextEffect));
 
-        p1.playCard(0);
+        p.playCard(0);
         assertEquals(Card.Color.BLUE, game.getState(Game.GameState.nextColor));
         assertEquals(2, game.getState(Game.GameState.nextNumber));
         assertEquals(Card.Effect.NONE, game.getState(Game.GameState.nextEffect));
@@ -40,9 +40,9 @@ public class CardTest {
         game.setState(Game.GameState.nextNumber, 7);
         game.setState(Game.GameState.nextColor, Card.Color.RED);
 
-        p1.addCardToHand(new SkipCard(Card.Color.RED));
+        p.addCardToHand(new SkipCard(Card.Color.RED));
 
-        p1.playCard(0);
+        p.playCard(0);
         assertEquals(Card.Color.RED, game.getState(Game.GameState.nextColor));
         assertEquals(true, game.getState(Game.GameState.shouldSkip));
     }
@@ -54,9 +54,9 @@ public class CardTest {
 
         Object turnRate = game.getState(Game.GameState.turnRate);
 
-        p1.addCardToHand(new ReverseCard(Card.Color.RED));
+        p.addCardToHand(new ReverseCard(Card.Color.RED));
 
-        p1.playCard(0);
+        p.playCard(0);
         assertEquals(Card.Color.RED, game.getState(Game.GameState.nextColor));
         assertEquals((int)turnRate * -1, game.getState(Game.GameState.turnRate));
     }
@@ -66,9 +66,9 @@ public class CardTest {
         game.setState(Game.GameState.nextNumber, 7);
         game.setState(Game.GameState.nextColor, Card.Color.RED);
 
-        p1.addCardToHand(new Draw2Card(Card.Color.RED));
+        p.addCardToHand(new Draw2Card(Card.Color.RED));
 
-        p1.playCard(0);
+        p.playCard(0);
         assertEquals(Card.Color.RED, game.getState(Game.GameState.nextColor));
         assertEquals(true, game.getState(Game.GameState.shouldSkip));
         assertEquals(2, game.getState(Game.GameState.nextDraw));
@@ -79,9 +79,9 @@ public class CardTest {
         game.setState(Game.GameState.nextNumber, 7);
         game.setState(Game.GameState.nextColor, Card.Color.RED);
 
-        p1.addCardToHand(new WildCard());
+        p.addCardToHand(new WildCard());
 
-        p1.playCard(0);
+        p.playCard(0);
         assertEquals(Card.Color.NONE, game.getState(Game.GameState.nextColor));
     }
 
@@ -90,9 +90,9 @@ public class CardTest {
         game.setState(Game.GameState.nextNumber, 7);
         game.setState(Game.GameState.nextColor, Card.Color.RED);
 
-        p1.addCardToHand(new Wild4Card());
+        p.addCardToHand(new Wild4Card());
 
-        p1.playCard(0);
+        p.playCard(0);
         assertEquals(Card.Color.NONE, game.getState(Game.GameState.nextColor));
         assertEquals(true, game.getState(Game.GameState.shouldSkip));
         assertEquals(4, game.getState(Game.GameState.nextDraw));
