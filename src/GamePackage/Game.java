@@ -169,10 +169,13 @@ public class Game {
      *
      * @param p the current player object
      */
-    public void checkEnding(Player p) {
+    public boolean checkEnding(Player p) {
         if (p.deckSize() == 0) {
             setState(GameState.shouldEnd, true);
+            // System.out.println("The winner is " + p.getName() + "!");
+            return true;
         }
+        return false;
     }
 
 

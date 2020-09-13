@@ -51,5 +51,36 @@ public class ValidMoveTest {
         assertEquals(Card.Color.RED, game.getState(Game.GameState.nextColor));
     }
 
+    @Test
+    public void testPlayableCards() throws Exception {
+        game.discardAll();
+        game.draw(new NumberCard(1, Card.Color.RED));
+
+        game.setState(Game.GameState.nextPlayer, 0);
+        game.setState(Game.GameState.nextColor, Card.Color.RED);
+
+        p1.addCardsToHand(new NumberCard(1, Card.Color.GREEN));
+
+        p1.make_turn();
+
+        game.finishTurn();
+        assertEquals(1, p1.deckSize());
+    }
+
+    @Test
+    public void testUnplayableCards() throws Exception {
+        game.discardAll();
+        game.draw(new NumberCard(1, Card.Color.BLUE));
+
+        game.setState(Game.GameState.nextPlayer, 0);
+        game.setState(Game.GameState.nextColor, Card.Color.RED);
+
+        p1.addCardsToHand(new NumberCard(1, Card.Color.GREEN));
+
+        p1.make_turn();
+
+        game.finishTurn();
+        assertEquals(2, p1.deckSize());
+    }
 
 }

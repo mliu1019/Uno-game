@@ -23,14 +23,21 @@ public class Player {
         deck = new ArrayList<Card>();
     }
 
-    public void setName(String n) {
-        name = n;
+    /*
+     * Gets the name for the current user.
+     */
+    public String getName() {
+        return name;
     }
 
+
+    /*
+     * Lets the current player declare the color they want to be played next.
+     */
     public void declareNextColor(Card.Color c) {
-        // preset next wanted color for test convenience.
         nextColor = c;
     }
+
 
     /*
      * Draws a card for the current player.
@@ -40,12 +47,14 @@ public class Player {
         addCardsToHand(c);
     }
 
+
     /*
      * Adds a card to the current player's hand.
      */
     public void addCardsToHand(Card ...c) {
         deck.addAll(Arrays.asList(c));
     }
+
 
     /*
      * Plays a card from the current player.
@@ -71,24 +80,20 @@ public class Player {
         g.discard(c); /* adds card to discard pile */
     }
 
+
     /*
      * Sets a turn for the current player.
      */
     public void make_turn() throws Exception {
         showHand();
 
-        boolean canPlay = false; /* checks if there are no available moves*/
-
-        for (int i=0; i<deck.size(); ++i) {
-            if (isValidMove(i)) {
-                canPlay = true;
-                break;
-            }
-        }
-
-        if (!canPlay) { /* if there are no available moves, automatically draws a card*/
+        if (!hasValidMoves(deck)) { /* if there are no available moves, automatically draws a card*/
             draw_card();
-            playCard(deck.size()-1); /* card must be played if playable */
+            try {
+                playCard(deck.size()-1); /* card must be played if playable */
+            } catch (Exception e) {
+                System.out.println("Card drawn cannot be played");
+            }
             return;
         }
 
@@ -118,6 +123,22 @@ public class Player {
             }
         }
     }
+
+
+    /*
+     * Determines if the current player has any valid moves.
+     */
+    public boolean hasValidMoves(ArrayList<Card> deck) {
+
+        for (int i=0; i<deck.size(); ++i) {
+            if (isValidMove(i)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     /*
      * Determines if the move attempted by the current player is valid.
@@ -155,6 +176,7 @@ public class Player {
         return true;
     }
 
+
     /*
      * Gets the card at index.
      */
@@ -162,12 +184,14 @@ public class Player {
         return deck.get(index);
     }
 
+
     /*
      * Gets the number of cards in hand.
      */
     public int deckSize() {
         return deck.size();
     }
+
 
     /*
      * Displays cards in hand to the current player.

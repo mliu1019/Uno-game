@@ -1,9 +1,12 @@
+import CardPackage.Card;
+import CardPackage.NumberCard;
 import GamePackage.Game;
 import GamePackage.Player;
+import UtilPackage.Uno;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class GameLogicTest {
     private Game game;
@@ -32,5 +35,17 @@ public class GameLogicTest {
         assertEquals(102, game.getDrawPileSize());
         assertEquals(1, game.getDiscardPileSize());
         // p1.showHand();
+    }
+
+    @Test
+    public void testGameEnds() throws Exception {
+        game.setState(Game.GameState.nextPlayer, 0);
+        game.setState(Game.GameState.nextColor, Card.Color.RED);
+
+        p1.addCardsToHand(new NumberCard(1, Card.Color.RED));
+        p1.playCard(0);
+
+        game.finishTurn();
+        assertEquals(true, game.checkEnding(p1));
     }
 }
