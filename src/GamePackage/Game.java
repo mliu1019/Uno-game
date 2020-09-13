@@ -62,8 +62,10 @@ public class Game {
     }
 
     public void dealFirstHand() {
+        int NUM_CARDS_PER_PLAYER = 7;
+
         for (Player p: players) {
-            for (int i=0; i<7; ++i) p.draw_card();
+            for (int i=0; i<NUM_CARDS_PER_PLAYER; ++i) p.draw_card();
         }
 
         Random rand = new Random();
