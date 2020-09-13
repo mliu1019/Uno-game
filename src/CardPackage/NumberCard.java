@@ -12,9 +12,9 @@ public class NumberCard extends Card{
 
     @Override
     public void causeEffect(Game g) {
-        g.setNextState(Game.GameState.nextColor, color);
-        g.setNextState(Game.GameState.nextNumber, number);
-        g.setNextState(Game.GameState.nextEffect, effect);
+        g.setState(Game.GameState.nextColor, color);
+        g.setState(Game.GameState.nextNumber, number);
+        g.setState(Game.GameState.nextEffect, effect);
     }
 
     public boolean isNumber(int n) {

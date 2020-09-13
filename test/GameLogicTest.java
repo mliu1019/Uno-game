@@ -23,9 +23,9 @@ public class GameLogicTest {
 
     @Test
     public void testNormalCardPlays() throws Exception {
-        game.setNextState(Game.GameState.nextPlayer, 0);
-        game.setNextState(Game.GameState.nextNumber, 7);
-        game.setNextState(Game.GameState.nextColor, Card.Color.RED);
+        game.setState(Game.GameState.nextPlayer, 0);
+        game.setState(Game.GameState.nextNumber, 7);
+        game.setState(Game.GameState.nextColor, Card.Color.RED);
 
         p1.addCardToHand(new NumberCard(1, Card.Color.RED));
         p1.addCardToHand(new NumberCard(1, Card.Color.BLUE));
@@ -49,8 +49,8 @@ public class GameLogicTest {
 
     @Test
     public void testGameTakeTurns() throws Exception {
-        game.setNextState(Game.GameState.nextPlayer, 0);
-        game.setNextState(Game.GameState.nextColor, Card.Color.RED);
+        game.setState(Game.GameState.nextPlayer, 0);
+        game.setState(Game.GameState.nextColor, Card.Color.RED);
 
         p1.addCardToHand(new NumberCard(1, Card.Color.RED));
         p1.addCardToHand(new NumberCard(2, Card.Color.RED));

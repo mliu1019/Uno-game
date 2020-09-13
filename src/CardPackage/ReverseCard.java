@@ -10,6 +10,6 @@ public class ReverseCard extends Card {
 
     @Override
     public void causeEffect(Game g) {
-        g.setNextState(Game.GameState.turnRate, (int)g.getState(Game.GameState.turnRate) * -1); /* reverse direction */
+        g.setState(Game.GameState.turnRate, (int)g.getState(Game.GameState.turnRate) * -1); /* reverse direction */
     }
 }

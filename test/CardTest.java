@@ -18,8 +18,8 @@ public class CardTest {
 
     @Test
     public void testNumberCard() throws Exception {
-        game.setNextState(Game.GameState.nextNumber, 7);
-        game.setNextState(Game.GameState.nextColor, Card.Color.RED);
+        game.setState(Game.GameState.nextNumber, 7);
+        game.setState(Game.GameState.nextColor, Card.Color.RED);
 
         p1.addCardToHand(new NumberCard(2, Card.Color.RED));
         p1.addCardToHand(new NumberCard(2, Card.Color.BLUE));
@@ -37,8 +37,8 @@ public class CardTest {
 
     @Test
     public void testSkipCard() throws Exception {
-        game.setNextState(Game.GameState.nextNumber, 7);
-        game.setNextState(Game.GameState.nextColor, Card.Color.RED);
+        game.setState(Game.GameState.nextNumber, 7);
+        game.setState(Game.GameState.nextColor, Card.Color.RED);
 
         p1.addCardToHand(new SkipCard(Card.Color.RED));
 
@@ -49,8 +49,8 @@ public class CardTest {
 
     @Test
     public void testReverseCard() throws Exception {
-        game.setNextState(Game.GameState.nextNumber, 7);
-        game.setNextState(Game.GameState.nextColor, Card.Color.RED);
+        game.setState(Game.GameState.nextNumber, 7);
+        game.setState(Game.GameState.nextColor, Card.Color.RED);
 
         Object turnRate = game.getState(Game.GameState.turnRate);
 
@@ -63,8 +63,8 @@ public class CardTest {
 
     @Test
     public void testDraw2Card() throws Exception {
-        game.setNextState(Game.GameState.nextNumber, 7);
-        game.setNextState(Game.GameState.nextColor, Card.Color.RED);
+        game.setState(Game.GameState.nextNumber, 7);
+        game.setState(Game.GameState.nextColor, Card.Color.RED);
 
         p1.addCardToHand(new Draw2Card(Card.Color.RED));
 
@@ -76,8 +76,8 @@ public class CardTest {
 
     @Test
     public void testWildCard() throws Exception {
-        game.setNextState(Game.GameState.nextNumber, 7);
-        game.setNextState(Game.GameState.nextColor, Card.Color.RED);
+        game.setState(Game.GameState.nextNumber, 7);
+        game.setState(Game.GameState.nextColor, Card.Color.RED);
 
         p1.addCardToHand(new WildCard());
 
@@ -87,8 +87,8 @@ public class CardTest {
 
     @Test
     public void testWild4Card() throws Exception {
-        game.setNextState(Game.GameState.nextNumber, 7);
-        game.setNextState(Game.GameState.nextColor, Card.Color.RED);
+        game.setState(Game.GameState.nextNumber, 7);
+        game.setState(Game.GameState.nextColor, Card.Color.RED);
 
         p1.addCardToHand(new Wild4Card());
 
