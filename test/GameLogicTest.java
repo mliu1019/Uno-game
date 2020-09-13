@@ -100,9 +100,6 @@ public class GameLogicTest {
         game.finishTurn();
 
         assertEquals(Card.Color.GREEN, game.getState(Game.GameState.nextColor));
-
-        p1.playCard(0);
-        game.finishTurn();
     }
 
     @Test
@@ -112,8 +109,6 @@ public class GameLogicTest {
 
         p0.addCardsToHand(new Wild4Card());
         p1.addCardsToHand(new NumberCard(1, Card.Color.RED));
-        p2.addCardsToHand(new NumberCard(1, Card.Color.GREEN));
-
 
         p0.declareNextColor(Card.Color.GREEN);
         p0.playCard(0);
@@ -125,13 +120,6 @@ public class GameLogicTest {
 
         game.turn();
         assertEquals(5, p1.deckSize());
-//        game.turn();
-//        assertEquals(2, game.getState(Game.GameState.nextPlayer));
-//
-//        System.out.println(game.getState(Game.GameState.nextColor));
-//
-//        p2.playCard(0);
-//        game.finishTurn();
     }
 
 }
