@@ -10,9 +10,9 @@ public class Wild4Card extends WildCard {
 
     @Override
     public void causeEffect(Game g) {
-        g.setNextState(Game.GameState.shouldSkip, true);
-        g.setNextState(Game.GameState.nextDraw, 4);
-        g.setNextState(Game.GameState.nextColor, color);
+        g.setNextState(Game.GameState.shouldSkip, true); /* next player misses a turn */
+        g.setNextState(Game.GameState.nextDraw, 4); /* next player draws 4 cards */
+        g.setNextState(Game.GameState.nextColor, color); /* current player decides color */
         color = Color.NONE;
     }
 }

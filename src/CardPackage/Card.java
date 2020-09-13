@@ -2,7 +2,15 @@ package CardPackage;
 
 import GamePackage.*;
 
+/*
+ * This is an abstract class for Uno Cards.
+ */
 public class Card {
+
+    /*
+     * Each card is assigned a color. For Wild Cards and Wild Draw Four Cards, the color is set to NONE.
+     * For all the other cards, the color is set as displayed as they are.
+     */
     public enum Color {
         RED("Red"), YELLOW("Yellow"), GREEN("Green"), BLUE("Blue"), NONE("");
 
@@ -12,14 +20,21 @@ public class Card {
             colorString = val;
         }
 
+        /*
+         * Returns the color in the form of a character string.
+         */
         @Override
         public String toString() {
             return colorString;
         }
     }
 
+    /*
+     * Each card is assigned an effect. For Number Cards, the effect is set to NONE.
+     * For all the other cards, the effect is set as displayed as they are.
+     */
     public enum Effect {
-        WILD, WILD4, SKIP, REVERSE, DRAW2, NONE
+        SKIP, REVERSE, DRAW2, WILD, WILD4, NONE
     }
 
     protected Color color = Color.NONE;
