@@ -144,7 +144,7 @@ public class Game {
             p.draw_card();
         }
 
-        if (getState(GameState.shouldSkip).equals(false)) {
+        if (getState(GameState.shouldSkip).equals(false)) { /* determines if player should skip turn */
             p.make_turn();
         } else {
             setState(GameState.shouldSkip, false);
@@ -192,6 +192,9 @@ public class Game {
         advanceTurn();
     }
 
+    /*
+     * Sets the state for the next player's turn.
+     */
     private void advanceTurn() {
         setState(GameState.nextPlayer,((int)getState(GameState.nextPlayer) + (int)getState(GameState.turnRate) + players.size()) % players.size());
     }
