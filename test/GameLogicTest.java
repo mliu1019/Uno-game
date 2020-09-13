@@ -21,6 +21,10 @@ public class GameLogicTest {
         game.initDeck();
     }
 
+    /*
+     * This test makes sure that if draw pile is empty, the top card in the discard pile is set aside and the rest of
+     * the discard pile is shuffled to create a new deck.
+     */
     @Test
     public void testReplenishCards() throws Exception {
         game.discardAll();

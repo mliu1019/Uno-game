@@ -66,6 +66,15 @@ public class ValidMoveTest {
     }
 
     @Test
+    public void testValidMoveWild() {
+        game.setState(Game.GameState.nextPlayer, 0);
+        game.setState(Game.GameState.nextColor, Card.Color.RED);
+
+        p1.addCardsToHand(new WildCard());
+        assertTrue(p1.isValidMove(0));
+    }
+
+    @Test
     public void testValidMoveBonus() {
         game.setState(Game.GameState.nextPlayer, 0);
         game.setState(Game.GameState.nextColor, Card.Color.RED);

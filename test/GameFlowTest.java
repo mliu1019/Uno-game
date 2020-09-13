@@ -22,6 +22,10 @@ public class GameFlowTest {
         game.initDeck();
     }
 
+
+    /*
+     * This test makes sure that players take their turn in order.
+     */
     @Test
     public void testTakeTurns() throws Exception {
         game.setState(Game.GameState.nextPlayer, 0);
@@ -44,6 +48,10 @@ public class GameFlowTest {
         assertEquals(0, game.getState(Game.GameState.nextPlayer));
     }
 
+
+    /*
+     * This test makes sure that the skip card makes the next player miss a turn.
+     */
     @Test
     public void testSkip() throws Exception {
         game.setState(Game.GameState.nextPlayer, 0);
@@ -69,6 +77,10 @@ public class GameFlowTest {
         assertEquals(1, game.getState(Game.GameState.nextPlayer));
     }
 
+
+    /*
+     * This test makes sure that the reverse card reverses the direction of the order of play.
+     */
     @Test
     public void testReverse() throws Exception {
         game.setState(Game.GameState.nextPlayer, 0);
@@ -85,6 +97,29 @@ public class GameFlowTest {
         assertEquals(0, game.getState(Game.GameState.nextPlayer));
     }
 
+
+    /*
+     * This test makes sure that the draw2 card lets the next player draw 2 cards and makes the next player miss a turn.
+     */
+    @Test
+    public void testDraw2() throws Exception {
+        game.setState(Game.GameState.nextPlayer, 0);
+        game.setState(Game.GameState.nextColor, Card.Color.RED);
+
+        p0.addCardsToHand(new Draw2Card(Card.Color.RED));
+        p0.playCard(0);
+        game.finishTurn();
+
+        game.turn();
+
+        assertEquals(2, game.getState(Game.GameState.nextPlayer));
+        assertEquals(2, p1.deckSize());
+    }
+
+
+    /*
+     * This test makes sure that the wild card lets the player decide the next color.
+     */
     @Test
     public void testWild() throws Exception {
         game.setState(Game.GameState.nextPlayer, 0);
@@ -102,6 +137,11 @@ public class GameFlowTest {
         assertEquals(Card.Color.GREEN, game.getState(Game.GameState.nextColor));
     }
 
+
+    /*
+     * This test makes sure that the wild4 card lets the player decide the next color, lets the next player draw 4 cards,
+     * and makes the next player miss a turn.
+     */
     @Test
     public void testWild4() throws Exception {
         game.setState(Game.GameState.nextPlayer, 0);
