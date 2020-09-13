@@ -8,6 +8,7 @@ public class SkipCard extends Card {
         effect = Effect.SKIP;
     }
 
+
     @Override
     public void causeEffect(Game g) {
         g.setState(Game.GameState.shouldSkip, true); /* next player misses a turn */

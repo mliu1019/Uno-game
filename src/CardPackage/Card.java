@@ -51,6 +51,7 @@ public class Card {
         }
     }
 
+    
     protected Color color = Color.NONE;
     protected Effect effect = Effect.NONE;
 
@@ -61,24 +62,35 @@ public class Card {
         effect = e;
     }
 
+
     /*
-     * Abstract method.
+     * Abstract method. The effect depends for each kind of card.
      */
     public void causeEffect(Game g) {
 
     }
 
+
+    /*
+     * Returns is the card is of wild type.
+     */
     public boolean isWildType() {
         return effect.equals(Effect.WILD) || effect.equals(Effect.WILD4);
     }
 
+
+    /*
+     * Returns is the card is of a specific color.
+     */
     public boolean isColor(Color c) {
         return color.equals(c);
     }
 
+
     public Effect getEffect() {
         return effect;
     }
+
 
     public Color getColor() {
         return color;

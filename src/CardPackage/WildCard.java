@@ -8,9 +8,11 @@ public class WildCard extends Card {
         color = Color.NONE;
     }
 
+
     public void setWildColor(Color c) {
         color = c;
     }
+
 
     @Override
     public void causeEffect(Game g) {

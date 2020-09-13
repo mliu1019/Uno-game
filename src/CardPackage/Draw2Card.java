@@ -8,6 +8,7 @@ public class Draw2Card extends Card {
         effect = Effect.DRAW2;
     }
 
+
     @Override
     public void causeEffect(Game g) {
         g.setState(Game.GameState.nextDraw, 2); /* the next player draws two cards */

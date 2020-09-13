@@ -10,6 +10,7 @@ public class NumberCard extends Card{
         effect = Effect.NONE;
     }
 
+
     @Override
     public void causeEffect(Game g) {
         g.setState(Game.GameState.nextColor, color);
@@ -17,9 +18,11 @@ public class NumberCard extends Card{
         g.setState(Game.GameState.nextEffect, effect);
     }
 
+
     public boolean isNumber(int n) {
         return number == n;
     }
+
 
     public int getNumber() {
         return number;

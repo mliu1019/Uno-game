@@ -8,6 +8,7 @@ public class ReverseCard extends Card {
         effect = Effect.REVERSE;
     }
 
+
     @Override
     public void causeEffect(Game g) {
         g.setState(Game.GameState.turnRate, (int)g.getState(Game.GameState.turnRate) * -1); /* reverse direction */

@@ -8,6 +8,7 @@ public class Wild4Card extends WildCard {
         color = Color.NONE;
     }
 
+
     @Override
     public void causeEffect(Game g) {
         g.setState(Game.GameState.shouldSkip, true); /* next player misses a turn */
