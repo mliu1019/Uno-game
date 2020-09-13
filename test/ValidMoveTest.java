@@ -1,4 +1,6 @@
 import CardPackage.Card;
+import CardPackage.NumberCard;
+import CardPackage.WildCard;
 import GamePackage.*;
 import UtilPackage.Uno;
 
@@ -15,7 +17,6 @@ public class ValidMoveTest {
     public void setUp() {
         game = new Game();
         p1 = new Player(game);
-        p2 = new Player(game);
 
         game.initDeck();
     }
@@ -35,23 +36,20 @@ public class ValidMoveTest {
     }
 
     @Test
-    public void testReplenishCards() throws Exception {
-        game.discardAll();
+    public void testValidMove() {
+        game.setState(Game.GameState.nextPlayer, 0);
+        game.setState(Game.GameState.nextColor, Card.Color.RED);
 
-        assertEquals(0, game.getDrawPileSize());
-        assertEquals(108, game.getDiscardPileSize());
+        p1.addCardsToHand(new NumberCard(1, Card.Color.GREEN));
+        assertFalse(p1.isValidMove(0));
 
-        for (int i=0; i<5; ++i) { /* moves all cards from the draw pile to form the discard pile */
-            p1.draw_card();
-        }
+        assertThrows(Uno.IllegalHandException.class, ()-> {
+            p1.playCard(0);
+        });
 
-        assertEquals(102, game.getDrawPileSize());
-        assertEquals(1, game.getDiscardPileSize());
-        // p1.showHand();
+        game.finishTurn();
+        assertEquals(Card.Color.RED, game.getState(Game.GameState.nextColor));
     }
 
-    @Test
-    public void testComplicatedGameLogic() {
 
-    }
 }
