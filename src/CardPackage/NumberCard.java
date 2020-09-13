@@ -2,9 +2,9 @@ package CardPackage;
 
 import GamePackage.Game;
 
-public class UnoCard extends Card{
+public class NumberCard extends Card{
     private int number;
-    public UnoCard(int n, Color c) {
+    public NumberCard(int n, Color c) {
         color = c;
         number = n;
         effect = Effect.NONE;

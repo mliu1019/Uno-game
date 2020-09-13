@@ -42,14 +42,14 @@ public class Game {
                     drawPile.add(new Wild4Card());
                 }
             } else {
-                drawPile.add(new UnoCard(0, c));
+                drawPile.add(new NumberCard(0, c));
 
                 for (int count=0; count<2; ++count) {
                     drawPile.add(new SkipCard(c));
                     drawPile.add(new ReverseCard(c));
                     drawPile.add(new Draw2Card(c));
                     for (int i = 1; i <= 9; ++i) {
-                        drawPile.add(new UnoCard(i, c));
+                        drawPile.add(new NumberCard(i, c));
                     }
                 }
             }
@@ -71,9 +71,9 @@ public class Game {
             int index = rand.nextInt(drawPile.size());
             Card c = drawPile.get(index);
 
-            if (c.getClass().equals(UnoCard.class)) {
+            if (c.getClass().equals(NumberCard.class)) {
                 setNextState(GameState.nextColor, c.getColor());
-                setNextState(GameState.nextNumber, ((UnoCard) c).getNumber());
+                setNextState(GameState.nextNumber, ((NumberCard) c).getNumber());
 
                 drawPile.remove(index);
                 discardPile.add(c);
@@ -101,7 +101,7 @@ public class Game {
         }
     }
 
-    public void turn() throws InvalidTurnAfterGameEnd {
+    public void turn() throws Exception {
         if (getState(GameState.shouldEnd).equals(true)) {
             throw new Uno.InvalidTurnAfterGameEnd("Game has ended.");
         }

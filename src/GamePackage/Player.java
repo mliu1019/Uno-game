@@ -53,10 +53,34 @@ public class Player {
 //        System.out.println("Card " + index + " is played.");
     }
 
-    public void make_turn() {
+    public void make_turn() throws Exception {
         showHand();
 
+        boolean canPlay = false;
+
+        for (int i=0; i<deck.size(); ++i) {
+            if (isValidMove(i)) {
+                canPlay = true;
+                break;
+            }
+        }
+
+        if (!canPlay) {
+            draw_card();
+            playCard(deck.size()-1);
+            return;
+        }
+
         Scanner cin = new Scanner(System.in);  // Create a Scanner object
+
+        System.out.println("Would you like to play a card?");
+        boolean bool = cin.nextBoolean();
+
+        if (!bool) {
+            draw_card();
+            playCard(deck.size()-1);
+            return;
+        }
 
         while (true) {
             System.out.println("Card (index) to play: ");
@@ -81,11 +105,20 @@ public class Player {
 
         Card c = deck.get(index);
 
-        if (c.getClass().equals(WildCard.class) || c.getClass().equals(Wild4Card.class)) return true;
+        if (c.getClass().equals(WildCard.class)) return true;
+
+        if (c.getClass().equals(Wild4Card.class)) {
+            for (int i=0; i<deck.size(); ++i) {
+                if (deck.get(i).getColor() == (Card.Color)g.getState(Game.GameState.nextColor)) {
+                    return false;
+                }
+            }
+            return true;
+        }
 
         if (!c.isColor((Card.Color)g.getState(Game.GameState.nextColor))) {
-            if (c.getClass().equals(UnoCard.class)) {
-                return ((UnoCard) c).isNumber((int) g.getState(Game.GameState.nextNumber));
+            if (c.getClass().equals(NumberCard.class)) {
+                return ((NumberCard) c).isNumber((int) g.getState(Game.GameState.nextNumber));
             } else {
                 return c.getEffect().equals(g.getState(Game.GameState.nextEffect));
             }

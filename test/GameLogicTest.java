@@ -27,10 +27,10 @@ public class GameLogicTest {
         game.setNextState(Game.GameState.nextNumber, 7);
         game.setNextState(Game.GameState.nextColor, Card.Color.RED);
 
-        p0.addCardToHand(new UnoCard(1, Card.Color.RED));
-        p0.addCardToHand(new UnoCard(1, Card.Color.BLUE));
-        p1.addCardToHand(new UnoCard(1, Card.Color.BLUE));
-        p1.addCardToHand(new UnoCard(0, Card.Color.RED));
+        p0.addCardToHand(new NumberCard(1, Card.Color.RED));
+        p0.addCardToHand(new NumberCard(1, Card.Color.BLUE));
+        p1.addCardToHand(new NumberCard(1, Card.Color.BLUE));
+        p1.addCardToHand(new NumberCard(0, Card.Color.RED));
         p2.addCardToHand(new WildCard());
         p2.addCardToHand(new WildCard());
 
@@ -52,8 +52,8 @@ public class GameLogicTest {
         game.setNextState(Game.GameState.nextPlayer, 0);
         game.setNextState(Game.GameState.nextColor, Card.Color.RED);
 
-        p0.addCardToHand(new UnoCard(1, Card.Color.RED));
-        p0.addCardToHand(new UnoCard(2, Card.Color.RED));
+        p0.addCardToHand(new NumberCard(1, Card.Color.RED));
+        p0.addCardToHand(new NumberCard(2, Card.Color.RED));
         p1.addCardToHand(new ReverseCard(Card.Color.RED));
         p2.addCardToHand(new ReverseCard(Card.Color.RED));
 
