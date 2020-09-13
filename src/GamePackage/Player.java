@@ -4,16 +4,20 @@ import CardPackage.*;
 import UtilPackage.Uno;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Scanner;
 
 public class Player {
     private String name = "default";
     private final Game g;
     private ArrayList<Card> deck;
+    private int playerIdx;
 
     private Card.Color nextColor = Card.Color.NONE; // By default
 
     public Player(Game game) {
+        playerIdx = game.playerSize();
         game.addPlayers(this);
         g = game;
         deck = new ArrayList<Card>();
@@ -33,14 +37,14 @@ public class Player {
      */
     public void draw_card() {
         Card c = g.dealCard();
-        addCardToHand(c);
+        addCardsToHand(c);
     }
 
     /*
      * Adds a card to the current player's hand.
      */
-    public void addCardToHand(Card c) {
-        deck.add(c);
+    public void addCardsToHand(Card ...c) {
+        deck.addAll(Arrays.asList(c));
     }
 
     /*
@@ -49,6 +53,9 @@ public class Player {
      * @param index the index of the card the current player wishes to play
      */
     public void playCard(int index) throws Exception {
+        if (!g.getState(Game.GameState.nextPlayer).equals(playerIdx)) {
+            throw new Uno.IllegalPlayerTurn("It is not your turn to player");
+        }
 
         if (!isValidMove(index)) { /* determines if the card is playable */
             throw new Uno.IllegalHandException("Card " + index + " is an illegal move.");

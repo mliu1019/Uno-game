@@ -21,8 +21,8 @@ public class CardTest {
         game.setState(Game.GameState.nextNumber, 7);
         game.setState(Game.GameState.nextColor, Card.Color.RED);
 
-        p.addCardToHand(new NumberCard(2, Card.Color.RED));
-        p.addCardToHand(new NumberCard(2, Card.Color.BLUE));
+        p.addCardsToHand(new NumberCard(2, Card.Color.RED));
+        p.addCardsToHand(new NumberCard(2, Card.Color.BLUE));
 
         p.playCard(0);
         assertEquals(Card.Color.RED, game.getState(Game.GameState.nextColor));
@@ -40,7 +40,7 @@ public class CardTest {
         game.setState(Game.GameState.nextNumber, 7);
         game.setState(Game.GameState.nextColor, Card.Color.RED);
 
-        p.addCardToHand(new SkipCard(Card.Color.RED));
+        p.addCardsToHand(new SkipCard(Card.Color.RED));
 
         p.playCard(0);
         assertEquals(Card.Color.RED, game.getState(Game.GameState.nextColor));
@@ -54,7 +54,7 @@ public class CardTest {
 
         Object turnRate = game.getState(Game.GameState.turnRate);
 
-        p.addCardToHand(new ReverseCard(Card.Color.RED));
+        p.addCardsToHand(new ReverseCard(Card.Color.RED));
 
         p.playCard(0);
         assertEquals(Card.Color.RED, game.getState(Game.GameState.nextColor));
@@ -66,7 +66,7 @@ public class CardTest {
         game.setState(Game.GameState.nextNumber, 7);
         game.setState(Game.GameState.nextColor, Card.Color.RED);
 
-        p.addCardToHand(new Draw2Card(Card.Color.RED));
+        p.addCardsToHand(new Draw2Card(Card.Color.RED));
 
         p.playCard(0);
         assertEquals(Card.Color.RED, game.getState(Game.GameState.nextColor));
@@ -79,7 +79,7 @@ public class CardTest {
         game.setState(Game.GameState.nextNumber, 7);
         game.setState(Game.GameState.nextColor, Card.Color.RED);
 
-        p.addCardToHand(new WildCard());
+        p.addCardsToHand(new WildCard());
 
         p.playCard(0);
         assertEquals(Card.Color.NONE, game.getState(Game.GameState.nextColor));
@@ -90,7 +90,7 @@ public class CardTest {
         game.setState(Game.GameState.nextNumber, 7);
         game.setState(Game.GameState.nextColor, Card.Color.RED);
 
-        p.addCardToHand(new Wild4Card());
+        p.addCardsToHand(new Wild4Card());
 
         p.playCard(0);
         assertEquals(Card.Color.NONE, game.getState(Game.GameState.nextColor));

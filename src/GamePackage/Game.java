@@ -139,19 +139,19 @@ public class Game {
 
         Player p = players.get((int)getState(GameState.nextPlayer));
 
-        /* determines if current player needs to draw cards */
-        int cardToDraw = (int)getState(GameState.nextDraw);
-        while (cardToDraw --> 0) {
+        int toDraw = (int)getState(GameState.nextDraw);
+        while (toDraw -- > 0) {
             p.draw_card();
-            checkPile();
         }
 
-        /* determines if current player needs to miss a turn */
-        if (!getState(GameState.shouldSkip).equals(true)) {
+        if (getState(GameState.shouldSkip).equals(false)) {
             p.make_turn();
-            checkEnding(p);
-            checkPile();
+        } else {
+            setState(GameState.shouldSkip, false);
         }
+
+        checkEnding(p);
+        checkPile();
 
         finishTurn();
     }
@@ -189,10 +189,11 @@ public class Game {
      * Finishes the current player's turn.
      */
     public void finishTurn() {
-        setState(GameState.nextDraw, 0);
-        setState(GameState.shouldSkip, false);
-        setState(GameState.nextPlayer, /* determines the next player */
-                ((int)getState(GameState.nextPlayer) + (int)getState(GameState.turnRate) + players.size()) % players.size());
+        advanceTurn();
+    }
+
+    private void advanceTurn() {
+        setState(GameState.nextPlayer,((int)getState(GameState.nextPlayer) + (int)getState(GameState.turnRate) + players.size()) % players.size());
     }
 
     /*
