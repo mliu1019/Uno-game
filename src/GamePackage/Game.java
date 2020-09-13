@@ -131,6 +131,7 @@ public class Game {
         while (state.get(GameState.shouldEnd).equals(false)) {
             try {
                 turn();
+                finishTurn();
             } catch (Exception e) {
                 // TODO: for displaying error messages when implementing GUI
                 System.out.println(e.getMessage());
@@ -161,7 +162,6 @@ public class Game {
 
         checkEnding(p);
 
-        finishTurn();
     }
 
     /*

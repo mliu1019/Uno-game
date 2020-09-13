@@ -65,6 +65,7 @@ public class GameFlowTest {
         game.finishTurn();
 
         game.turn();
+        game.finishTurn();
 
         assertEquals(2, game.getState(Game.GameState.nextPlayer));
         assertThrows(Uno.IllegalPlayerTurn.class, () -> p1.playCard(0));
@@ -73,6 +74,7 @@ public class GameFlowTest {
         game.finishTurn();
 
         game.turn();
+        game.finishTurn();
 
         assertEquals(1, game.getState(Game.GameState.nextPlayer));
     }
@@ -111,6 +113,7 @@ public class GameFlowTest {
         game.finishTurn();
 
         game.turn();
+        game.finishTurn();
 
         assertEquals(2, game.getState(Game.GameState.nextPlayer));
         assertEquals(2, p1.deckSize());
@@ -159,6 +162,7 @@ public class GameFlowTest {
         assertEquals(1, game.getState(Game.GameState.nextPlayer));
 
         game.turn();
+        game.finishTurn();
         assertEquals(5, p1.deckSize());
     }
 
