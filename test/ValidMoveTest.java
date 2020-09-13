@@ -19,6 +19,10 @@ public class ValidMoveTest {
         game.initDeck();
     }
 
+
+    /*
+     * This test makes sure that the player does not play out of index.
+     */
     @Test
     public void testIllegalThrows() {
         game.dealFirstHand();
@@ -33,8 +37,12 @@ public class ValidMoveTest {
         // p1.showHand();
     }
 
+
+    /*
+     * This test makes sure that the player only plays card with matching number or color.
+     */
     @Test
-    public void testValidMoveNumber() {
+    public void testValidMoveNumberColor() {
         game.setState(Game.GameState.nextPlayer, 0);
         game.setState(Game.GameState.nextColor, Card.Color.RED);
 
@@ -49,6 +57,10 @@ public class ValidMoveTest {
         assertEquals(Card.Color.RED, game.getState(Game.GameState.nextColor));
     }
 
+
+    /*
+     * This test makes sure that the player only plays card with matching effect.
+     */
     @Test
     public void testValidMoveEffect() {
         game.setState(Game.GameState.nextPlayer, 0);
@@ -65,6 +77,10 @@ public class ValidMoveTest {
         assertEquals(Card.Color.RED, game.getState(Game.GameState.nextColor));
     }
 
+
+    /*
+     * This test makes sure that the player can always play the wild card.
+     */
     @Test
     public void testValidMoveWild() {
         game.setState(Game.GameState.nextPlayer, 0);
@@ -74,6 +90,10 @@ public class ValidMoveTest {
         assertTrue(p1.isValidMove(0));
     }
 
+
+    /*
+     * This test makes sure that the player only plays the wild4 card if there are no other playable cards.
+     */
     @Test
     public void testValidMoveBonus() {
         game.setState(Game.GameState.nextPlayer, 0);
@@ -91,6 +111,10 @@ public class ValidMoveTest {
         assertEquals(Card.Color.RED, game.getState(Game.GameState.nextColor));
     }
 
+
+    /*
+     * This test makes sure that the player should play out a card after drawing it if it can be played.
+     */
     @Test
     public void testPlayableCards() throws Exception {
         game.discardAll();
@@ -107,6 +131,10 @@ public class ValidMoveTest {
         assertEquals(1, p1.deckSize());
     }
 
+
+    /*
+     * This test makes sure that the player should not play out a card after drawing it if it cannot be played.
+     */
     @Test
     public void testUnplayableCards() throws Exception {
         game.discardAll();

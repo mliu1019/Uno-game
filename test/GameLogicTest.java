@@ -41,6 +41,9 @@ public class GameLogicTest {
         // p1.showHand();
     }
 
+    /*
+     * This test makes sure to end the game if a player has played all the cards.
+     */
     @Test
     public void testGameEnds() throws Exception {
         game.setState(Game.GameState.nextPlayer, 0);

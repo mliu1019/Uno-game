@@ -22,6 +22,9 @@ public class GameSetupTest {
         game.initDeck();
     }
 
+    /*
+     * This test makes sure that the deck and the players' hands are properly set up.
+     */
     @Test
     public void testGameSetup() {
         assertEquals(NUM_PLAYERS, game.playerSize());
