@@ -23,7 +23,6 @@ public class ValidMoveTest {
     public void testIllegalThrows() {
         game.dealFirstHand();
 
-        /*
         assertThrows(Uno.IllegalHandException.class, ()-> {
             p1.playCard(-1);
         });
@@ -31,18 +30,16 @@ public class ValidMoveTest {
         assertThrows(Uno.IllegalHandException.class, ()-> {
             p1.playCard(7);
         });
-         */
-    }
-
-    @Test
-    public void testCardLogic() {
-
-        //TODO: Test symbols next (skip)
+        p1.showHand();
     }
 
     @Test
     public void testComplicatedGameLogic() {
 
-        //TODO: a complicated example of valid/invalid moves over
+    }
+
+    @Test
+    public void testDrawCards() {
+
     }
 }

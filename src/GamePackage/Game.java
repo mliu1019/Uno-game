@@ -111,6 +111,7 @@ public class Game {
      * Deals the card on top of the draw pile to the current player.
      */
     public Card dealCard() {
+        checkPile();
         return drawPile.remove(0);
     }
 
@@ -151,7 +152,6 @@ public class Game {
         }
 
         checkEnding(p);
-        checkPile();
 
         finishTurn();
     }

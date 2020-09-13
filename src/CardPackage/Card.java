@@ -34,7 +34,21 @@ public class Card {
      * For all the other cards, the effect is set as displayed as they are.
      */
     public enum Effect {
-        SKIP, REVERSE, DRAW2, WILD, WILD4, NONE
+        SKIP("Skip"), REVERSE("Reverse"), DRAW2("Draw2"), WILD("Wild"), WILD4("Wild4"), NONE("None");
+
+        private final String effectString;
+
+        Effect(String val) {
+            effectString = val;
+        }
+
+        /*
+         * Returns the effect in the form of a character string.
+         */
+        @Override
+        public String toString() {
+            return effectString;
+        }
     }
 
     protected Color color = Color.NONE;

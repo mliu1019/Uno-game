@@ -175,7 +175,17 @@ public class Player {
     public void showHand() {
         System.out.println("GamePackage.Player " + name + " to play with hands:");
         for (int i=0; i<deck.size(); ++i) {
-            System.out.println(i + ": " + deck.get(i));
+
+            Card curr = deck.get(i);
+            String cardFunction;
+
+            if (curr.getClass().equals(NumberCard.class)) {
+                cardFunction = Integer.toString(((NumberCard)curr).getNumber());
+            } else {
+                cardFunction = curr.getEffect().toString();
+            }
+
+            System.out.println(i + ": " + deck.get(i).getColor() + " " + cardFunction);
         }
         System.out.println();
     }
