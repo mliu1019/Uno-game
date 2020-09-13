@@ -13,6 +13,7 @@ public class Game {
     ArrayList<Card> drawPile;
     ArrayList<Card> discardPile;
 
+
     /*
      * Creates all the possible game states.
      */
@@ -27,6 +28,7 @@ public class Game {
         put(GameState.nextPlayer, 0); /* the next player */
     }};;
 
+
     /*
      * Initializes a new game.
      */
@@ -35,6 +37,7 @@ public class Game {
         drawPile = new ArrayList<>();
         discardPile = new ArrayList<>();
     }
+
 
     /*
      * Initializes a new deck of shuffled cards.
@@ -66,6 +69,7 @@ public class Game {
         Collections.shuffle(drawPile);
     }
 
+
     /*
      * Adds players to the game.
      *
@@ -74,6 +78,7 @@ public class Game {
     public void addPlayers(Player ... pp) {
         Collections.addAll(players, pp);
     }
+
 
     /*
      * Adds players to the game.
@@ -107,6 +112,7 @@ public class Game {
         }
     }
 
+
     /*
      * Deals the card on top of the draw pile to the current player.
      */
@@ -114,6 +120,7 @@ public class Game {
         checkPile();
         return drawPile.remove(0);
     }
+
 
     /*
      * Starts the game and enters the game loop.
@@ -132,6 +139,7 @@ public class Game {
 
         System.out.println("Game has ended.");
     }
+
 
     /*
      * Makes a single turn for the current player.
@@ -167,15 +175,16 @@ public class Game {
         }
     }
 
+
     /*
      * Checks if the draw pile if empty and update the two piles.
      */
     public void checkPile() {
         if (drawPile.size() == 0) {
-            Card topCard = discardPile.get(discardPile.size()-1); /* sets aside the top card in the discard pile */
+            Card topCard = discardPile.remove(discardPile.size()-1); /* sets aside the top card in the discard pile */
 
-            discardPile.remove(discardPile.size()-1);
-            for (int i=0; i<discardPile.size(); ++i) { /* moves all cards in the discard pile to form the new draw pile */
+            int num_cards = discardPile.size();
+            for (int i=0; i<num_cards; ++i) { /* moves all cards in the discard pile to form the new draw pile */
                 Card temp = discardPile.remove(0);
                 drawPile.add(temp);
             }
@@ -185,6 +194,7 @@ public class Game {
         }
     }
 
+
     /*
      * Finishes the current player's turn.
      */
@@ -192,12 +202,24 @@ public class Game {
         advanceTurn();
     }
 
+
     /*
      * Sets the state for the next player's turn.
      */
     private void advanceTurn() {
         setState(GameState.nextPlayer,((int)getState(GameState.nextPlayer) + (int)getState(GameState.turnRate) + players.size()) % players.size());
     }
+
+
+    /*
+     * Adds a card to the draw pile.
+     *
+     * @param c the card to be drawn
+     */
+    public void draw(Card c) {
+        drawPile.add(c);
+    }
+
 
     /*
      * Adds a card to the discard pile.
@@ -208,12 +230,42 @@ public class Game {
         discardPile.add(c);
     }
 
+
+    /*
+     * Discards all cards.
+     */
+    public void discardAll() {
+        int num_cards = drawPile.size();
+        for (int i=0; i<num_cards; ++i) { /* moves all cards from the draw pile to form the discard pile */
+            Card temp = drawPile.remove(0);
+            discardPile.add(temp);
+        }
+    }
+
+
+    /*
+     * Returns the number of cards in the draw pile.
+     */
+    public int getDrawPileSize() {
+        return drawPile.size();
+    }
+
+
+    /*
+     * Returns the number of cards in the draw pile.
+     */
+    public int getDiscardPileSize() {
+        return discardPile.size();
+    }
+
+
     /*
      * Sets the state.
      */
     public void setState(GameState gs, Object val) {
         state.put(gs, val);
     }
+
 
     /*
      * Gets the state.
@@ -222,12 +274,14 @@ public class Game {
         return state.get(gs);
     }
 
+
     /*
      * Gets the number of players.
      */
     public int playerSize() {
         return players.size();
     }
+
 
     /*
      * Gets the number of cards discarded.

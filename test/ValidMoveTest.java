@@ -1,3 +1,4 @@
+import CardPackage.Card;
 import GamePackage.*;
 import UtilPackage.Uno;
 
@@ -30,16 +31,27 @@ public class ValidMoveTest {
         assertThrows(Uno.IllegalHandException.class, ()-> {
             p1.playCard(7);
         });
-        p1.showHand();
+        // p1.showHand();
+    }
+
+    @Test
+    public void testReplenishCards() throws Exception {
+        game.discardAll();
+
+        assertEquals(0, game.getDrawPileSize());
+        assertEquals(108, game.getDiscardPileSize());
+
+        for (int i=0; i<5; ++i) { /* moves all cards from the draw pile to form the discard pile */
+            p1.draw_card();
+        }
+
+        assertEquals(102, game.getDrawPileSize());
+        assertEquals(1, game.getDiscardPileSize());
+        // p1.showHand();
     }
 
     @Test
     public void testComplicatedGameLogic() {
-
-    }
-
-    @Test
-    public void testDrawCards() {
 
     }
 }

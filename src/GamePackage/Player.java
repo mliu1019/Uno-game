@@ -173,7 +173,8 @@ public class Player {
      * Displays cards in hand to the current player.
      */
     public void showHand() {
-        System.out.println("GamePackage.Player " + name + " to play with hands:");
+        System.out.println("Player " + name + "'s current hand:");
+
         for (int i=0; i<deck.size(); ++i) {
 
             Card curr = deck.get(i);
