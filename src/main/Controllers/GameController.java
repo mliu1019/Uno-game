@@ -5,26 +5,20 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 
 import GamePackage.*;
 import Models.*;
 
-import java.security.Principal;
-
-@RestController("/game")
-public class GameController {
+@RestController
+@RequestMapping(path="/game")
+public class GameController extends MainController {
     @Autowired
     private SimpMessagingTemplate messenger;
 
-    private final Game game;
-
     public GameController() {
-        game = new Game();
-        game.setNumPlayers(1);
-        game.initDeck();
+
     }
 
     @MessageMapping("/hello")
@@ -46,6 +40,15 @@ public class GameController {
         }
         messenger.convertAndSend("/game/state", game.getGameSate());
     }
+
+    @RequestMapping(value = "/play/{index}", method = RequestMethod.POST)
+    public PlayFeedback playCard(
+            @PathVariable("index") int index,
+            @RequestParam(name="playerID") String playerID) {
+        System.out.println("Player " + playerID + " played a card at " + index);
+        return game.makePlay(playerID, index);
+    }
+
 
 //    @RequestMapping("/")
 }

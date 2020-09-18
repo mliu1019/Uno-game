@@ -1,12 +1,13 @@
 package GamePackage;
 
 import CardPackage.*;
+import Models.PlayFeedback;
 
 import java.util.*;
 
 public class Game {
     public enum GameState {
-        turnRate, shouldStart, shouldEnd, shouldSkip, nextDraw, nextColor, nextNumber, nextEffect, nextPlayer
+        turnRate, shouldStart, shouldEnd, shouldSkip, nextDraw, nextColor, nextNumber, nextEffect, nextPlayer, nextPlayerID
     }
 
     ArrayList<Player> players;
@@ -27,6 +28,7 @@ public class Game {
         put(GameState.nextEffect, Card.Effect.NONE); /* the next effect on card */
         put(GameState.turnRate, 1); /* the direction for the order of play, 1 for clockwise and -1 for counterclockwise*/
         put(GameState.nextPlayer, 0); /* the next player */
+        put(GameState.nextPlayerID, "");
     }};
 
     private int maxNumPlayers = 4;
@@ -119,6 +121,8 @@ public class Game {
                 break; /* set initial state complete */
             }
         }
+
+        setState(GameState.nextPlayerID, players.get(0).getPlayerID());
     }
 
 
@@ -220,8 +224,19 @@ public class Game {
      */
     private void advanceTurn() {
         setState(GameState.nextPlayer,((int)getState(GameState.nextPlayer) + (int)getState(GameState.turnRate) + players.size()) % players.size());
+        setState(GameState.nextPlayerID, players.get(0).getPlayerID());
     }
 
+    public PlayFeedback makePlay(String pid, int index) {
+        System.out.println(players.size());
+        for (Player p: players) {
+            System.out.println(p.getPlayerID() + " and " + pid);
+            if (p.getPlayerID().equals(pid)) {
+                return p.playCard(index);
+            }
+        }
+        return new PlayFeedback(false, "Player cannot be found.");
+    }
 
     /*
      * Adds a card to the draw pile.

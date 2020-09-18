@@ -28,6 +28,10 @@ public class NumberCard extends Card{
         return number;
     }
 
+    public void setNumber(int n) {
+        number = n;
+    }
+
     @Override
     public String toString() {
         return color + " " + number;

@@ -1,6 +1,7 @@
 package GamePackage;
 
 import CardPackage.*;
+import Models.PlayFeedback;
 import UtilPackage.Uno;
 
 import java.util.ArrayList;
@@ -15,10 +16,6 @@ public class Player {
     private String playerID;
 
     private Card.Color nextColor = Card.Color.NONE; // By default
-
-    public Player() {
-        deck = new ArrayList<>();
-    }
 
     public Player(Game game, String id) {
         g = game;
@@ -63,13 +60,13 @@ public class Player {
      *
      * @param index the index of the card the current player wishes to play
      */
-    public void playCard(int index) throws Exception {
+    public PlayFeedback playCard(int index)  {
         if (!g.getState(Game.GameState.nextPlayer).equals(playerIdx)) {
-            throw new Uno.IllegalPlayerTurn("It is not your turn to player");
+            return new PlayFeedback(false, "Not your turn.");
         }
 
         if (!isValidMove(index)) { /* determines if the card is playable */
-            throw new Uno.IllegalHandException("Card " + index + " is an illegal move.");
+            return new PlayFeedback(false, "Move is illegal.");
         }
 
         Card c = deck.remove(index); /* removes card from player's hand */
@@ -80,6 +77,8 @@ public class Player {
         c.causeEffect(g);
 
         g.discard(c); /* adds card to discard pile */
+
+        return new PlayFeedback(true, "Card " + c + " is played.");
     }
 
 

@@ -12,7 +12,7 @@ public class Card {
      * For all the other cards, the color is set as displayed as they are.
      */
     public enum Color {
-        RED("Red"), YELLOW("Yellow"), GREEN("Green"), BLUE("Blue"), NONE("");
+        RED("Red"), YELLOW("Yellow"), GREEN("Green"), BLUE("Blue"), NONE("-");
 
         private final String colorString;
 
@@ -34,7 +34,7 @@ public class Card {
      * For all the other cards, the effect is set as displayed as they are.
      */
     public enum Effect {
-        SKIP("Skip"), REVERSE("Reverse"), DRAW2("Draw2"), WILD("Wild"), WILD4("Wild4"), NONE("None");
+        SKIP("Skip"), REVERSE("Reverse"), DRAW2("Draw2"), WILD("Wild"), WILD4("Wild4"), NONE("-");
 
         private final String effectString;
 
@@ -51,7 +51,6 @@ public class Card {
         }
     }
 
-    
     protected Color color = Color.NONE;
     protected Effect effect = Effect.NONE;
 

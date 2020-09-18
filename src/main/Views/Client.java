@@ -35,9 +35,11 @@ public class Client {
             GameState gs = (GameState) payload;
             if (!gs.getShouldStart()) {
                 window.setDisplayedText("Waiting for more players to join...");
-            } else {
-                System.out.println("Game is ready to start");
+                return;
             }
+
+            window.setDisplayedGameState(gs);
+
         }
     }
 
@@ -53,7 +55,7 @@ public class Client {
 
             HashMap<String, Object> map = (HashMap<String, Object>) payload;
             window.setDisplayedName((String) map.get("playerId"));
-            window.setDisplayedCards((ArrayList<HashMap<String,Object>>) map.get("playerCards"));
+            window.setDisplayedCards(map);
 //            Player p = (Player) payload;
 //            window.setDisplayedName(p.getPlayerID());
 //            window.setDisplayedCards(p.getPlayerCards());
@@ -63,7 +65,6 @@ public class Client {
     private static class sessionHandler extends StompSessionHandlerAdapter  {
         @Override
         public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
-            System.out.println("Subscribe to /game/state");
             session.subscribe("/game/state", new gameStateHandler());
             session.subscribe("/player/state", new playerStateHandler());
             session.send("/app/hello", new JoinMessage("player"));
