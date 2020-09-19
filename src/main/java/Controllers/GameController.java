@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -24,7 +25,7 @@ public class GameController extends MainController {
     public GameController() {}
 
     @MessageMapping("/hello")
-    @SendTo("/player/state")
+    @SendToUser("/state")
     public Player join(SimpMessageHeaderAccessor header, JoinMessage msg) {
         String sessionID = header.getSessionId();
         Player p = new Player(game, sessionID);
@@ -60,10 +61,9 @@ public class GameController extends MainController {
 
     @Bean
     public MappedInterceptor interceptor() {
-        return new MappedInterceptor(new String[]{"/game/*", "/game/play/*"}, new HandlerInterceptor() {
+        return new MappedInterceptor(new String[]{"/game/*", "/game/play/*", "/game/color/*"}, new HandlerInterceptor() {
             @Override
             public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-                System.out.println("Updating game status.");
                 updateGameStatus();
             }
         });
@@ -72,7 +72,7 @@ public class GameController extends MainController {
     private void updateGameStatus() {
         messenger.convertAndSend("/game/state", game.getStates());
         for (var p: game.getPlayers()) {
-            messenger.convertAndSend("/player/" + p.getPlayerID(), p);
+            messenger.convertAndSend("/deck/" + p.getPlayerID(), p);
         }
     }
 

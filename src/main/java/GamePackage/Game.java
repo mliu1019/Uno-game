@@ -237,10 +237,13 @@ public class Game {
     }
 
     public PlayFeedback makePlay(String pid, int index) {
-        System.out.println("make play");
         for (Player p: players) {
             if (p.getPlayerID().equals(pid)) {
-                return p.playCard(index);
+                var ret = p.playCard(index);
+                if (ret.isSuccess()) {
+                    finishTurn();
+                }
+                return ret;
             }
         }
         return new PlayFeedback(false, "Player cannot be found.");

@@ -30,11 +30,13 @@ public class Client {
         @Override
         public void handleFrame(StompHeaders headers, Object payload) {
             GameState gs = (GameState) payload;
+            System.out.println("Receive Game State." + gs);
             if (!gs.getShouldStart()) {
                 window.setDisplayedText("Waiting for more players to join...");
                 return;
             }
 
+            window.setDisplayedText("");
             window.setDisplayedGameState(gs);
 
         }
@@ -48,6 +50,7 @@ public class Client {
 
         @Override
         public void handleFrame(StompHeaders headers, Object payload) {
+            System.out.println("Receive deck: " + payload);
             window.setDisplayedCards((HashMap<String, Object>) payload);
         }
     }
@@ -64,16 +67,12 @@ public class Client {
 
             String sessionID = (String) map.get("playerID");
 
-            System.out.println(sessionID);
-
             window.setDisplayedName(sessionID);
             window.setDisplayedCards(map);
-
-            session.subscribe("/player/" + sessionID, new playerDeckHandler());
-
 //            Player p = (Player) payload;
 //            window.setDisplayedName(p.getPlayerID());
 //            window.setDisplayedCards(p.getPlayerCards());
+            session.subscribe("/deck/" + sessionID, new playerDeckHandler());
         }
     }
 
@@ -86,7 +85,6 @@ public class Client {
         @Override
         public void handleFrame(StompHeaders headers, Object payload) {
             List<String> players = (List<String>)payload;
-            System.out.println("player list: " + players);
         }
     }
 
@@ -94,7 +92,7 @@ public class Client {
         @Override
         public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
             session.subscribe("/game/state", new gameStateHandler());
-            session.subscribe("/player/state", new playerStateHandler());
+            session.subscribe("/user/state", new playerStateHandler());
             session.subscribe("/game/players", new playerListHandler());
             session.send("/app/hello", new JoinMessage("player"));
         }
