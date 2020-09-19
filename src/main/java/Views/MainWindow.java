@@ -20,6 +20,8 @@ public class MainWindow extends  JFrame {
 
     ArrayList<JButton> cardHolders = new ArrayList<>();
 
+    JButton drawButton, endButton;
+
     int cardPlayed = -1;
 
     public MainWindow() {
@@ -85,8 +87,10 @@ public class MainWindow extends  JFrame {
 
         JPanel rp = new JPanel();
         rp.setLayout(new BoxLayout(rp, BoxLayout.Y_AXIS));
-        rp.add(new JButton("DRAW"));
-        rp.add(new JButton("PLAY"));
+        drawButton = new JButton("Draw Card");
+        rp.add(drawButton);
+        endButton = new JButton("End Turn");
+        rp.add(endButton);
 
         playerName = new JLabel("display player name here");
         lp.add(playerName);
@@ -165,35 +169,39 @@ public class MainWindow extends  JFrame {
     public void setDisplayedName(String name) {
         playerName.setText(name);
 
-        try {
-            for (Component c : wildPanel.getComponents()) {
-                JButton button = (JButton) c;
-                Color background = c.getBackground();
-                if (Color.RED.equals(background)) {
-                    button.addActionListener(e -> {
-                        HTTPHandlers.setWildAndPlay(name, this.cardPlayed, Card.Color.RED);
-                        wildPanel.setVisible(false);
-                    });
-                } else if (Color.GREEN.equals(background)) {
-                    button.addActionListener(e -> {
-                        HTTPHandlers.setWildAndPlay(name, this.cardPlayed, Card.Color.GREEN);
-                        wildPanel.setVisible(false);
-                    });
-                } else if (Color.BLUE.equals(background)) {
-                    button.addActionListener(e -> {
-                        HTTPHandlers.setWildAndPlay(name, this.cardPlayed, Card.Color.BLUE);
-                        wildPanel.setVisible(false);
-                    });
-                } else if (Color.YELLOW.equals(background)) {
-                    button.addActionListener(e -> {
-                        HTTPHandlers.setWildAndPlay(name, this.cardPlayed, Card.Color.YELLOW);
-                        wildPanel.setVisible(false);
-                    });
-                }
+        for (Component c : wildPanel.getComponents()) {
+            JButton button = (JButton) c;
+            Color background = c.getBackground();
+            if (Color.RED.equals(background)) {
+                button.addActionListener(e -> {
+                    HTTPHandlers.setWildAndPlay(name, this.cardPlayed, Card.Color.RED);
+                    wildPanel.setVisible(false);
+                });
+            } else if (Color.GREEN.equals(background)) {
+                button.addActionListener(e -> {
+                    HTTPHandlers.setWildAndPlay(name, this.cardPlayed, Card.Color.GREEN);
+                    wildPanel.setVisible(false);
+                });
+            } else if (Color.BLUE.equals(background)) {
+                button.addActionListener(e -> {
+                    HTTPHandlers.setWildAndPlay(name, this.cardPlayed, Card.Color.BLUE);
+                    wildPanel.setVisible(false);
+                });
+            } else if (Color.YELLOW.equals(background)) {
+                button.addActionListener(e -> {
+                    HTTPHandlers.setWildAndPlay(name, this.cardPlayed, Card.Color.YELLOW);
+                    wildPanel.setVisible(false);
+                });
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
+        drawButton.addActionListener(e -> {
+            HTTPHandlers.drawCard(name);
+        });
+
+        endButton.addActionListener(e -> {
+            HTTPHandlers.endPlay(name);
+        });
     }
 
 //    public void setDisplayedCards(ArrayList<Card> cards) {

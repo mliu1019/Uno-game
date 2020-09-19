@@ -2,7 +2,6 @@ package Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
@@ -49,15 +48,26 @@ public class GameController extends MainController {
     public PlayFeedback playCard(
             @PathVariable("index") int index,
             @RequestParam(name="playerID") String playerID) {
-        return game.makePlay(playerID, index);
+        return game.playCard(playerID, index);
     }
 
-    @PutMapping(value = "/color")
+    @PutMapping(value = "/wild")
     public PlayFeedback WildColor(@RequestBody WildCardPlay cp) {
 //        System.out.println("player wild at " + cp.getIndex());
         game.makeWildColor(cp.getPlayerID(), cp.getColor());
-        return game.makePlay(cp.getPlayerID(), cp.getIndex());
+        return game.playCard(cp.getPlayerID(), cp.getIndex());
     }
+
+    @PutMapping(value = "/makeplay")
+    public PlayFeedback MakePlay(@RequestBody PlayCommand cmd) {
+        return game.makePlay(cmd);
+    }
+
+    @PutMapping(value = "/endplay")
+    public PlayFeedback EndPlay(@RequestParam String playerID) {
+        return game.endPlay(playerID);
+    }
+
 
     @Bean
     public MappedInterceptor interceptor() {

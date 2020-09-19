@@ -1,6 +1,7 @@
 package GamePackage;
 
 import CardPackage.*;
+import Models.PlayCommand;
 import Models.PlayFeedback;
 
 import java.util.*;
@@ -222,9 +223,10 @@ public class Game {
     /*
      * Sets the state for the next player's turn.
      */
-    private void advanceTurn() {
-        setState(GameState.nextPlayer,((int)getState(GameState.nextPlayer) + (int)getState(GameState.turnRate) + players.size()) % players.size());
-        setState(GameState.nextPlayerID, players.get(0).getPlayerID());
+    public void advanceTurn() {
+        int nextp = ((int)getState(GameState.nextPlayer) + (int)getState(GameState.turnRate) + players.size()) % players.size();
+        setState(GameState.nextPlayer, nextp);
+        setState(GameState.nextPlayerID, players.get(nextp).getPlayerID());
     }
 
     private Player findPlayer(String pid) {
@@ -236,7 +238,7 @@ public class Game {
         return null;
     }
 
-    public PlayFeedback makePlay(String pid, int index) {
+    public PlayFeedback playCard(String pid, int index) {
         for (Player p: players) {
             if (p.getPlayerID().equals(pid)) {
                 var ret = p.playCard(index);
@@ -247,6 +249,61 @@ public class Game {
             }
         }
         return new PlayFeedback(false, "Player cannot be found.");
+    }
+
+    public PlayFeedback preCheckGameCondition(Player p) {
+        if (p == null) {
+            return new PlayFeedback(false, "Player not in game.");
+        }
+
+        if (getState(GameState.shouldStart).equals(false) || getState(GameState.shouldEnd).equals(true)) {
+            return new PlayFeedback(false, "Game has not started.");
+        }
+
+        if (!getState(GameState.nextPlayerID).equals(p.getPlayerID())) {
+            return new PlayFeedback(false, "Not your turn to play.");
+        }
+
+        return new PlayFeedback(true, "");
+    }
+
+    public PlayFeedback makePlay(PlayCommand cmd) {
+        Player p = findPlayer(cmd.getPlayerID());
+        var feedback = preCheckGameCondition(p);
+        if (!feedback.isSuccess()) return feedback;
+
+        if (getState(GameState.shouldSkip).equals(true)) {
+            feedback.setSuccess(false);
+            feedback.setMessage("Player turn should be skipped.");
+            return feedback;
+        }
+
+        if (cmd.getCommand().equals(PlayCommand.CMD.DRAW)) {
+            p.draw_card();
+            feedback.setMessage("Player Draws a card.");
+            return feedback;
+        }
+
+        if(cmd.getCommand().equals(PlayCommand.CMD.WILD)) {
+            p.declareNextColor(cmd.getWildColor());
+        }
+        var ret = p.playCard(cmd.getIndex());
+        if (ret.isSuccess()) {
+            p.endTurn();
+        }
+
+        return ret;
+    }
+
+    public PlayFeedback endPlay(String playerID) {
+        Player p = findPlayer(playerID);
+        var feedback = preCheckGameCondition(p);
+        if (!feedback.isSuccess()) return feedback;
+
+        p.endTurn();
+
+        feedback.setMessage("Player end turn.");
+        return feedback;
     }
 
     public void makeWildColor(String pid, Card.Color c) {

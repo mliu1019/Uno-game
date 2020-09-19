@@ -16,12 +16,26 @@ public class Player {
 
     private Card.Color nextColor = Card.Color.NONE; // By default
 
+    private Card lastPlayed = null;
+
     public Player(Game game, String id) {
         g = game;
         playerIdx = game.getNumPlayers();
         playerID = id;
         game.addPlayers(this);
         deck = new ArrayList<>();
+    }
+
+    public void endTurn() {
+        int toDraw = (int) g.getState(Game.GameState.nextDraw);
+        while (toDraw-- > 0) draw_card();
+
+        g.setState(Game.GameState.shouldSkip, false);
+        g.setState(Game.GameState.nextDraw, 0);
+
+        lastPlayed.causeEffect(g);
+
+        g.advanceTurn();
     }
 
     public void setName(String s) {
@@ -67,16 +81,16 @@ public class Player {
             return new PlayFeedback(false, "Move is illegal.");
         }
 
-        Card c = deck.remove(index); /* removes card from player's hand */
+        lastPlayed = deck.remove(index); /* removes card from player's hand */
 
-        if (c.isWildType()) { /* allows player to declare the next color */
-            ((WildCard) c).setWildColor(nextColor);
+        if (lastPlayed.isWildType()) { /* allows player to declare the next color */
+            ((WildCard) lastPlayed).setWildColor(nextColor);
         }
-        c.causeEffect(g);
+//        c.causeEffect(g);
 
-        g.discard(c); /* adds card to discard pile */
+        g.discard(lastPlayed); /* adds card to discard pile */
 
-        return new PlayFeedback(true, "Card " + c + " is played.");
+        return new PlayFeedback(true, "Card " + lastPlayed + " is played.");
     }
 
 

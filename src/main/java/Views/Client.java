@@ -30,7 +30,6 @@ public class Client {
         @Override
         public void handleFrame(StompHeaders headers, Object payload) {
             GameState gs = (GameState) payload;
-            System.out.println("Receive Game State." + gs);
             if (!gs.getShouldStart()) {
                 window.setDisplayedText("Waiting for more players to join...");
                 return;
@@ -50,7 +49,6 @@ public class Client {
 
         @Override
         public void handleFrame(StompHeaders headers, Object payload) {
-            System.out.println("Receive deck: " + payload);
             window.setDisplayedCards((HashMap<String, Object>) payload);
         }
     }
