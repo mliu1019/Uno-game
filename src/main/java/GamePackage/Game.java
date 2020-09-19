@@ -4,16 +4,16 @@ import CardPackage.*;
 import Models.PlayFeedback;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Game {
     public enum GameState {
-        turnRate, shouldStart, shouldEnd, shouldSkip, nextDraw, nextColor, nextNumber, nextEffect, nextPlayer, nextPlayerID
+        players, turnRate, shouldStart, shouldEnd, shouldSkip, nextDraw, nextColor, nextNumber, nextEffect, nextPlayer, nextPlayerID
     }
 
     ArrayList<Player> players;
     ArrayList<Card> drawPile;
     ArrayList<Card> discardPile;
-
 
     /*
      * Creates all the possible game states.
@@ -227,15 +227,30 @@ public class Game {
         setState(GameState.nextPlayerID, players.get(0).getPlayerID());
     }
 
-    public PlayFeedback makePlay(String pid, int index) {
-        System.out.println(players.size());
+    private Player findPlayer(String pid) {
         for (Player p: players) {
-            System.out.println(p.getPlayerID() + " and " + pid);
+            if (p.getPlayerID().equals(pid)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public PlayFeedback makePlay(String pid, int index) {
+        System.out.println("make play");
+        for (Player p: players) {
             if (p.getPlayerID().equals(pid)) {
                 return p.playCard(index);
             }
         }
         return new PlayFeedback(false, "Player cannot be found.");
+    }
+
+    public void makeWildColor(String pid, Card.Color c) {
+        Player p = findPlayer(pid);
+        if (p != null) {
+            p.declareNextColor(c);
+        }
     }
 
     /*
@@ -308,7 +323,9 @@ public class Game {
         return players.size();
     }
 
-    public Map<GameState, Object> getGameSate() { return state; }
+    public Map<GameState, Object> getStates() {
+        return state;
+    }
 
     /*
      * Gets the number of cards discarded.
@@ -316,4 +333,15 @@ public class Game {
     public int deckSize() {
         return drawPile.size();
     }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public List<String> getPlayerNames() {
+        return players.stream()
+                .map(object -> Objects.toString(object))
+                .collect(Collectors.toList());
+    }
+
 }

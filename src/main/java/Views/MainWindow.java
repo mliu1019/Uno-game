@@ -5,8 +5,6 @@ import Models.GameState;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,9 +17,10 @@ public class MainWindow extends  JFrame {
     private JLabel labelNextColor, labelNextNumber, labelNextSymbol;
 
     JPanel cardPanel, wildPanel;
-    Card.Color wildColor;
 
     ArrayList<JButton> cardHolders = new ArrayList<>();
+
+    int cardPlayed = -1;
 
     public MainWindow() {
         JPanel mainCont = new JPanel() {
@@ -139,18 +138,10 @@ public class MainWindow extends  JFrame {
         JButton bb = new JButton("BLUE"); bb.setBackground(Color.blue);
         JButton yb = new JButton("YELLOW"); yb.setBackground(Color.yellow);
 
-        rb.addActionListener(e -> wildColor = Card.Color.RED);
-        gb.addActionListener(e -> wildColor = Card.Color.GREEN);
-        bb.addActionListener(e -> wildColor = Card.Color.BLUE);
-        yb.addActionListener(e -> wildColor = Card.Color.YELLOW);
-
-        ActionListener al = e -> {
-          wildPanel.setVisible(false);
-        };
-        rb.addActionListener(al);
-        gb.addActionListener(al);
-        bb.addActionListener(al);
-        yb.addActionListener(al);
+//        rb.addActionListener(e -> wildColor = Card.Color.RED);
+//        gb.addActionListener(e -> wildColor = Card.Color.GREEN);
+//        bb.addActionListener(e -> wildColor = Card.Color.BLUE);
+//        yb.addActionListener(e -> wildColor = Card.Color.YELLOW);
 
         p.add(rb, BorderLayout.NORTH);
         p.add(gb, BorderLayout.SOUTH);
@@ -173,6 +164,36 @@ public class MainWindow extends  JFrame {
 
     public void setDisplayedName(String name) {
         playerName.setText(name);
+
+        try {
+            for (Component c : wildPanel.getComponents()) {
+                JButton button = (JButton) c;
+                Color background = c.getBackground();
+                if (Color.RED.equals(background)) {
+                    button.addActionListener(e -> {
+                        HTTPHandlers.setWildAndPlay(name, this.cardPlayed, Card.Color.RED);
+                        wildPanel.setVisible(false);
+                    });
+                } else if (Color.GREEN.equals(background)) {
+                    button.addActionListener(e -> {
+                        HTTPHandlers.setWildAndPlay(name, this.cardPlayed, Card.Color.GREEN);
+                        wildPanel.setVisible(false);
+                    });
+                } else if (Color.BLUE.equals(background)) {
+                    button.addActionListener(e -> {
+                        HTTPHandlers.setWildAndPlay(name, this.cardPlayed, Card.Color.BLUE);
+                        wildPanel.setVisible(false);
+                    });
+                } else if (Color.YELLOW.equals(background)) {
+                    button.addActionListener(e -> {
+                        HTTPHandlers.setWildAndPlay(name, this.cardPlayed, Card.Color.YELLOW);
+                        wildPanel.setVisible(false);
+                    });
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 //    public void setDisplayedCards(ArrayList<Card> cards) {
@@ -191,6 +212,7 @@ public class MainWindow extends  JFrame {
         ArrayList<HashMap<String,Object>> cards = (ArrayList<HashMap<String, Object>>) payload.get("playerCards");
         cardPanel.removeAll();
         cardHolders.clear();
+
         for (int i=0; i<cards.size(); ++i) {
             HashMap<String, Object> c = cards.get(i);
             JButton button = new JButton();
@@ -205,12 +227,15 @@ public class MainWindow extends  JFrame {
 
             cardHolders.add(button);
             int finalI = i;
+
             button.addActionListener(e -> {
+                cardPlayed = finalI;
                 if (c.get("wildType").equals(true)) {
-                    System.out.println("setting wild panel visible");
+//                    setWildPlayer((String) payload.get("playerID"), finalI);
                     wildPanel.setVisible(true);
+                } else {
+                    HTTPHandlers.playCard( (String) payload.get("playerID"), this.cardPlayed);
                 }
-//                HTTPHandlers.playCard( (String) payload.get("playerID"), finalI);
             });
         }
 
@@ -225,10 +250,5 @@ public class MainWindow extends  JFrame {
         labelNextSymbol.setText(String.valueOf(gs.getNextEffect()));
         labelNextNumber.setText(String.valueOf(gs.getNextNumber()));
         labelNextColor.setText(String.valueOf(gs.getNextColor()));
-    }
-
-
-    public static void main(String[] args) {
-        new MainWindow();
     }
 }

@@ -2,7 +2,6 @@ package GamePackage;
 
 import CardPackage.*;
 import Models.PlayFeedback;
-import UtilPackage.Uno;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +22,6 @@ public class Player {
         playerID = id;
         game.addPlayers(this);
         deck = new ArrayList<>();
-
     }
 
     public void setName(String s) {
@@ -34,7 +32,7 @@ public class Player {
      * Lets the current player declare the color they want to be played next.
      */
     public void declareNextColor(Card.Color c) {
-        nextColor = c;
+            nextColor = c;
     }
 
 
@@ -220,5 +218,10 @@ public class Player {
 
     public void setPlayerCards(ArrayList<Card> cards) {
         deck = cards;
+    }
+
+    @Override
+    public String toString() {
+        return playerID;
     }
 }

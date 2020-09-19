@@ -1,7 +1,5 @@
 package Views;
 
-import CardPackage.Card;
-import GamePackage.Player;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.*;
 import org.springframework.web.socket.client.WebSocketClient;
@@ -10,10 +8,9 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import Models.GameState;
@@ -22,7 +19,7 @@ import Models.JoinMessage;
 public class Client {
     private static MainWindow window;
 
-    private StompSession session;
+    private static StompSession session;
 
     private static class gameStateHandler implements StompFrameHandler {
         @Override
@@ -43,6 +40,18 @@ public class Client {
         }
     }
 
+    private static class playerDeckHandler implements StompFrameHandler {
+        @Override
+        public Type getPayloadType(StompHeaders headers) {
+            return Object.class;
+        }
+
+        @Override
+        public void handleFrame(StompHeaders headers, Object payload) {
+            window.setDisplayedCards((HashMap<String, Object>) payload);
+        }
+    }
+
     private static class playerStateHandler implements StompFrameHandler {
         @Override
         public Type getPayloadType(StompHeaders headers) {
@@ -51,14 +60,33 @@ public class Client {
 
         @Override
         public void handleFrame(StompHeaders headers, Object payload) {
-            // Unable to process Childclass, hashmap is the best option.
-
             HashMap<String, Object> map = (HashMap<String, Object>) payload;
-            window.setDisplayedName((String) map.get("playerId"));
+
+            String sessionID = (String) map.get("playerID");
+
+            System.out.println(sessionID);
+
+            window.setDisplayedName(sessionID);
             window.setDisplayedCards(map);
+
+            session.subscribe("/player/" + sessionID, new playerDeckHandler());
+
 //            Player p = (Player) payload;
 //            window.setDisplayedName(p.getPlayerID());
 //            window.setDisplayedCards(p.getPlayerCards());
+        }
+    }
+
+    private static class playerListHandler implements StompFrameHandler {
+        @Override
+        public Type getPayloadType(StompHeaders headers) {
+            return List.class;
+        }
+
+        @Override
+        public void handleFrame(StompHeaders headers, Object payload) {
+            List<String> players = (List<String>)payload;
+            System.out.println("player list: " + players);
         }
     }
 
@@ -67,6 +95,7 @@ public class Client {
         public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
             session.subscribe("/game/state", new gameStateHandler());
             session.subscribe("/player/state", new playerStateHandler());
+            session.subscribe("/game/players", new playerListHandler());
             session.send("/app/hello", new JoinMessage("player"));
         }
     }
