@@ -35,6 +35,11 @@ public class Client {
                 return;
             }
 
+            if (gs.getShouldEnd()) {
+                window.setDisplayedText(String.format("Player %s has won the game.", gs.getNextPlayerID().substring(0, 8)));
+                return;
+            }
+
             window.setDisplayedText("");
             window.setDisplayedGameState(gs);
 

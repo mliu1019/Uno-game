@@ -25,6 +25,7 @@ public class MainWindow extends  JFrame {
     JButton drawButton, endButton;
 
     JButton gameStateButton;
+    JButton drawPileButton;
 
     int cardPlayed = -1;
 
@@ -77,6 +78,10 @@ public class MainWindow extends  JFrame {
         return p;
     }
 
+    /**
+     * Player Panel including card deck and other functioning buttons
+     * @return JPanel
+     */
     private JPanel initializePlayerPanel() {
         JPanel p = new JPanel();
         p.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -104,6 +109,23 @@ public class MainWindow extends  JFrame {
         return p;
     }
 
+    /**
+     * Make button unclickable, and unfocusable
+     * @param button JButton target
+     */
+    private void voidilizeJButton(JButton button) {
+        button.setVerticalTextPosition(JButton.BOTTOM);
+        button.setHorizontalTextPosition(SwingConstants.CENTER);
+        button.setFocusable(false);
+        button.setBorderPainted( false );
+        button.setFocusPainted( false );
+        button.setContentAreaFilled(false);
+    }
+
+    /**
+     * JPanel to display current game state, discardPile, and drawPile
+     * @return JPanel
+     */
     public JPanel initializeGameStatePanel() {
         labelNextColor = new JLabel();
         labelNextNumber = new JLabel();
@@ -115,10 +137,24 @@ public class MainWindow extends  JFrame {
 //        p.add(labelNextSymbol);
 //        p.add(labelNextPlayer);
         gameStateButton = new JButton();
+        drawPileButton = new JButton();
+        voidilizeJButton(gameStateButton);
+        voidilizeJButton(drawPileButton);
+        try {
+            Image img = ImageIO.read(new File("src/resources/images/uno.png"));
+            Image resizedImage = img.getScaledInstance(50, 80, Image.SCALE_DEFAULT);
+            drawPileButton.setIcon(new ImageIcon(resizedImage));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        p.add(drawPileButton);
         p.add(gameStateButton);
         return p;
     }
 
+    /**
+     * Main container
+     */
     private JPanel initContainer() {
         JPanel p = new JPanel();
         p.setPreferredSize(new Dimension(500,500));
@@ -143,6 +179,9 @@ public class MainWindow extends  JFrame {
         return p;
     }
 
+    /**
+     * Shows up when wildCard is played
+     */
     private JPanel initWildColorPicker() {
         JPanel p = new JPanel();
         p.setLayout(new GridLayout(4,1));
@@ -162,6 +201,10 @@ public class MainWindow extends  JFrame {
         return p;
     }
 
+    /**
+     * Text area to notify game states, ex: when game has ended.
+     * @param text message to display
+     */
     public void setDisplayedText(String text) {
         if (text.length() == 0) {
             notification.setVisible(false);
@@ -171,8 +214,12 @@ public class MainWindow extends  JFrame {
         notification.setVisible(true);
     }
 
+    /**
+     * Display userID
+     * @param name userID to display
+     */
     public void setDisplayedName(String name) {
-        playerName.setText(name);
+        playerName.setText(name.substring(0, 8));
 
         for (Component c : wildPanel.getComponents()) {
             JButton button = (JButton) c;
@@ -209,6 +256,10 @@ public class MainWindow extends  JFrame {
         });
     }
 
+    /**
+     * update gui of players deck
+     * @param payload deck of the current player
+     */
     public void setDisplayedCards(HashMap<String, Object> payload) {
         ArrayList<HashMap<String,Object>> cards = (ArrayList<HashMap<String, Object>>) payload.get("playerCards");
         cardPanel.removeAll();
@@ -239,7 +290,10 @@ public class MainWindow extends  JFrame {
         cardPanel.updateUI();
     }
 
-
+    /**
+     * display last card played
+     * @param c card information
+     */
     private JButton displayCard(HashMap<String, Object> c) {
         JButton button = new JButton();
 
@@ -260,6 +314,7 @@ public class MainWindow extends  JFrame {
             Image resizedImage = img.getScaledInstance(50, 80, Image.SCALE_DEFAULT);
             button.setIcon(new ImageIcon(resizedImage));
         } catch (Exception e) {
+            System.out.println(path);
             System.out.println(e);
         }
         return button;
@@ -289,6 +344,8 @@ public class MainWindow extends  JFrame {
             System.out.println(e);
         }
 
+        gameStateButton.setText(String.valueOf(gs.getDiscardPileSize()));
+        drawPileButton.setText(String.valueOf(gs.getDrawPileSize()));
     }
 
     public static void main(String[] args) {

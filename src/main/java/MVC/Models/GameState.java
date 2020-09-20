@@ -13,6 +13,9 @@ public class GameState {
     Card.Color nextColor = Card.Color.NONE;
     Card.Effect nextEffect = Card.Effect.NONE;
 
+    int drawPileSize;
+    int discardPileSize;
+
     public boolean getShouldStart() {
         return shouldStart;
     }
@@ -75,5 +78,21 @@ public class GameState {
 
     public void setNextPlayerID(String nextPlayerID) {
         this.nextPlayerID = nextPlayerID;
+    }
+
+    public int getDrawPileSize() {
+        return drawPileSize;
+    }
+
+    public void setDrawPileSize(int drawPileSize) {
+        this.drawPileSize = drawPileSize;
+    }
+
+    public int getDiscardPileSize() {
+        return discardPileSize;
+    }
+
+    public void setDiscardPileSize(int discardPileSize) {
+        this.discardPileSize = discardPileSize;
     }
 }

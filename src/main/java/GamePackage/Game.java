@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class Game {
     public enum GameState {
-        players, turnRate, shouldStart, shouldEnd, shouldSkip, nextDraw, nextColor, nextNumber, nextEffect, nextPlayer, shouldStack, shouldDisarm, nextPlayerID
+        drawPileSize, discardPileSize, winner, turnRate, shouldStart, shouldEnd, shouldSkip, nextDraw, nextColor, nextNumber, nextEffect, nextPlayer, shouldStack, shouldDisarm, nextPlayerID
     }
 
     ArrayList<Player> players;
@@ -32,9 +32,10 @@ public class Game {
         put(GameState.turnRate, 1); /* the direction for the order of play, 1 for clockwise and -1 for counterclockwise*/
         put(GameState.nextPlayer, 0); /* the next player */
         put(GameState.nextPlayerID, "");
+        put(GameState.winner, "");
     }};
 
-    private int maxNumPlayers = 7;
+    private int maxNumPlayers = 4;
 
     /*
      * Initializes a new game.
@@ -124,6 +125,7 @@ public class Game {
 
                 drawPile.remove(index);
                 discardPile.add(c);
+
                 break; /* set initial state complete */
             }
         }
@@ -190,6 +192,11 @@ public class Game {
             return true;
         }
         return false;
+    }
+
+    public void endGame(String winnerID) {
+        setState(GameState.shouldEnd, true);
+        setState(GameState.winner, winnerID);
     }
 
 
@@ -357,6 +364,8 @@ public class Game {
     }
 
     public Map<GameState, Object> getStates() {
+        setState(GameState.drawPileSize, drawPile.size());
+        setState(GameState.discardPileSize, discardPile.size());
         return state;
     }
 

@@ -27,6 +27,10 @@ public class Player {
     }
 
     public void endTurn() {
+        if (deck.size() == 0) {
+            g.endGame(playerID);
+            return;
+        }
         int toDraw = (int) g.getState(Game.GameState.nextDraw);
         while (toDraw --> 0) draw_card();
 
