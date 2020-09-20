@@ -16,7 +16,7 @@ public class Game {
     ArrayList<Card> drawPile;
     ArrayList<Card> discardPile;
 
-    /*
+    /**
      * Creates all the possible game states.
      */
     private Map<GameState, Object> state = new HashMap<>() {{
@@ -37,7 +37,8 @@ public class Game {
 
     private int maxNumPlayers = 4;
 
-    /*
+
+    /**
      * Initializes a new game.
      */
     public Game() {
@@ -46,15 +47,21 @@ public class Game {
         discardPile = new ArrayList<>();
     }
 
+
+    /**
+     * Determines if game is ready to start
+     */
     public boolean ready() {
         return players.size() == maxNumPlayers;
     }
+
 
     public void setNumPlayers(int n) {
         maxNumPlayers = n;
     }
 
-    /*
+
+    /**
      * Initializes a new deck of shuffled cards.
      */
     public void initDeck() {
@@ -68,7 +75,7 @@ public class Game {
                     drawPile.add(new Wild4Card());
                 }
                 for (int i=0; i<2; ++i) {
-                    drawPile.add(new DisarmCard());
+                    drawPile.add(new DisarmCard()); /* initializes disarm cards */
                 }
             } else {
                 drawPile.add(new NumberCard(0, c));
@@ -88,7 +95,7 @@ public class Game {
     }
 
 
-    /*
+    /**
      * Adds players to the game.
      *
      * @param pp ArrayList of player objects to be added to the game
@@ -98,7 +105,7 @@ public class Game {
     }
 
 
-    /*
+    /**
      * Adds players to the game.
      */
     public void dealFirstHand() {
@@ -134,7 +141,7 @@ public class Game {
     }
 
 
-    /*
+    /**
      * Deals the card on top of the draw pile to the current player.
      */
     public Card dealCard() {
@@ -142,27 +149,22 @@ public class Game {
         return drawPile.remove(0);
     }
 
-    /*
+
+    /**
      * Makes a single turn for the current player.
      */
     public void turn() throws Exception {
 
         if (getState(GameState.shouldDisarm).equals(true)) { /* determines if players should disarm */
             for (Player p: players) {
-                ArrayList<Card> deck = p.getPlayerCards();
-                for (int i=deck.size()-1; i>=0; --i) {
-                    Card curr = deck.get(i);
-                    if (curr.getClass().equals(WildCard.class) || curr.getClass().equals(Wild4Card.class)) {
-                        p.discardCard(i);
-                    }
-                }
+                p.disarmCard();
             }
         }
 
         Player p = players.get((int)getState(GameState.nextPlayer));
 
         if (getState(GameState.shouldStack).equals(true)) { /* determines if player should stack */
-            p.make_stackTurn();
+            p.makeStackTurn();
         } else {
             int toDraw = (int)getState(GameState.nextDraw);
             while (toDraw -- > 0) {
@@ -180,7 +182,7 @@ public class Game {
     }
 
 
-    /*
+    /**
      * Checks if the current player has no cards left and game ends.
      *
      * @param p the current player object
@@ -200,7 +202,7 @@ public class Game {
     }
 
 
-    /*
+    /**
      * Checks if the draw pile if empty and update the two piles.
      */
     public void checkPile() {
@@ -218,7 +220,8 @@ public class Game {
         }
     }
 
-    /*
+
+    /**
      * Sets the state for the next player's turn.
      */
     public void advanceTurn() {
@@ -226,6 +229,7 @@ public class Game {
         setState(GameState.nextPlayer, nextPlayer);
         setState(GameState.nextPlayerID, players.get(nextPlayer).getPlayerID());
     }
+
 
     private Player findPlayer(String pid) {
         for (Player p: players) {
@@ -235,6 +239,7 @@ public class Game {
         }
         return null;
     }
+
 
     public PlayFeedback preCheckGameCondition(Player p) {
         if (p == null) {
@@ -251,6 +256,7 @@ public class Game {
 
         return new PlayFeedback(true, "");
     }
+
 
     public PlayFeedback makePlay(PlayCommand cmd) {
         Player p = findPlayer(cmd.getPlayerID());
@@ -275,6 +281,7 @@ public class Game {
         return p.playCard(cmd.getIndex());
     }
 
+
     public PlayFeedback endPlay(String playerID) {
         Player p = findPlayer(playerID);
         var feedback = preCheckGameCondition(p);
@@ -286,6 +293,7 @@ public class Game {
         return feedback;
     }
 
+
     public void makeWildColor(String pid, Card.Color c) {
         Player p = findPlayer(pid);
         if (p != null) {
@@ -293,7 +301,7 @@ public class Game {
         }
     }
 
-    /*
+    /**
      * Adds a card to the draw pile.
      *
      * @param c the card to be drawn
@@ -303,7 +311,7 @@ public class Game {
     }
 
 
-    /*
+    /**
      * Adds a card to the discard pile.
      *
      * @param c the card to be discarded
@@ -313,7 +321,7 @@ public class Game {
     }
 
 
-    /*
+    /**
      * Discards all cards.
      */
     public void discardAll() {
@@ -325,7 +333,7 @@ public class Game {
     }
 
 
-    /*
+    /**
      * Returns the number of cards in the draw pile.
      */
     public int getDrawPileSize() {
@@ -333,14 +341,15 @@ public class Game {
     }
 
 
-    /*
+    /**
      * Returns the number of cards in the draw pile.
      */
     public int getDiscardPileSize() {
         return discardPile.size();
     }
 
-    /*
+
+    /**
      * Sets the state.
      */
     public void setState(GameState gs, Object val) {
@@ -348,7 +357,7 @@ public class Game {
     }
 
 
-    /*
+    /**
      * Gets the state.
      */
     public Object getState(GameState gs) {
@@ -356,7 +365,7 @@ public class Game {
     }
 
 
-    /*
+    /**
      * Gets the number of players.
      */
     public int getNumPlayers() {
@@ -369,7 +378,7 @@ public class Game {
         return state;
     }
 
-    /*
+    /**
      * Gets the number of cards discarded.
      */
     public int deckSize() {

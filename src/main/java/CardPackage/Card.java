@@ -2,12 +2,12 @@ package CardPackage;
 
 import GamePackage.*;
 
-/*
+/**
  * This is an abstract class for Uno Cards.
  */
 public class Card {
 
-    /*
+    /**
      * Each card is assigned a color. For Wild Cards and Wild Draw Four Cards, the color is set to NONE.
      * For all the other cards, the color is set as displayed as they are.
      */
@@ -29,7 +29,7 @@ public class Card {
         }
     }
 
-    /*
+    /**
      * Each card is assigned an effect. For Number Cards, the effect is set to NONE.
      * For all the other cards, the effect is set as displayed as they are.
      */
@@ -43,7 +43,7 @@ public class Card {
             effectString = val;
         }
 
-        /*
+        /**
          * Returns the effect in the form of a character string.
          */
         @Override
@@ -63,7 +63,7 @@ public class Card {
     }
 
 
-    /*
+    /**
      * Abstract method. The effect depends for each kind of card.
      */
     public void causeEffect(Game g) {
@@ -71,7 +71,7 @@ public class Card {
     }
 
 
-    /*
+    /**
      * Returns is the card is of wild type.
      */
     public boolean isWildType() {
@@ -79,7 +79,7 @@ public class Card {
     }
 
 
-    /*
+    /**
      * Returns is the card is of a specific color.
      */
     public boolean isColor(Color c) {

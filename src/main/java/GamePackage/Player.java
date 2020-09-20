@@ -61,7 +61,8 @@ public class Player {
         name = s;
     }
 
-    /*
+
+    /**
      * Lets the current player declare the color they want to be played next.
      */
     public void declareNextColor(Card.Color c) {
@@ -69,7 +70,7 @@ public class Player {
     }
 
 
-    /*
+    /**
      * Draws a card for the current player.
      */
     public void draw_card() {
@@ -78,15 +79,17 @@ public class Player {
     }
 
 
-    /*
+    /**
      * Adds a card to the current player's hand.
+     *
+     * @param c the array of cards to be added
      */
     public void addCardsToHand(Card ...c) {
         deck.addAll(Arrays.asList(c));
     }
 
 
-    /*
+    /**
      * Plays a card from the current player.
      *
      * @param index the index of the card the current player wishes to play
@@ -113,7 +116,8 @@ public class Player {
         return new PlayFeedback(true, "Card " + lastPlayed + " is played.");
     }
 
-    /*
+
+    /**
      * Plays a Draw2 card from the current player.
      *
      * @param index the index of the card the current player wishes to play
@@ -137,13 +141,19 @@ public class Player {
     }
 
 
+    /**
+     * Discards a card at index for testing purposes.
+     *
+     * @param index the index of the card to be discarded.
+     */
     public void discardCard(int index) {
         lastPlayed = deck.remove(index); /* removes card from player's hand */
         g.discard(lastPlayed); /* adds card to discard pile */
         return;
     }
 
-    /*
+
+    /**
      * Sets a turn for the current player.
      */
     public void make_turn() throws Exception {
@@ -186,13 +196,14 @@ public class Player {
         }
     }
 
-    /*
-     * Sets a turn for the current player.
+
+    /**
+     * Sets a stack turn for the current player.
      */
-    public void make_stackTurn() throws Exception {
+    public void makeStackTurn() throws Exception {
         showHand();
 
-        if (!hasValidMoves(deck)) { /* if there are no available moves, automatically draw the stacked number*/
+        if (!hasValidMovesDraw2(deck)) { /* if there are no available moves, automatically draw the stacked number*/
             int toDraw = (int)g.getState(Game.GameState.nextDraw);
             while (toDraw -- > 0) {
                 draw_card();
@@ -232,8 +243,26 @@ public class Player {
     }
 
 
-    /*
+    /**
+     * Disarm wild cards for the player.
+     */
+    public void disarmCard() {
+
+        for (int i=deck.size()-1; i>=0; --i) {
+            Card curr = deck.get(i);
+            if (curr.getClass().equals(WildCard.class) || curr.getClass().equals(Wild4Card.class)) {
+                discardCard(i);
+            }
+        }
+
+        return;
+    }
+
+
+    /**
      * Determines if the current player has any valid moves.
+     *
+     * @param deck the hands of the player
      */
     public boolean hasValidMoves(ArrayList<Card> deck) {
 
@@ -247,8 +276,27 @@ public class Player {
     }
 
 
-    /*
+    /**
+     * Determines if the current player has any valid moves to stack.
+     *
+     * @param deck the hands of the player
+     */
+    public boolean hasValidMovesDraw2(ArrayList<Card> deck) {
+
+        for (int i=0; i<deck.size(); ++i) {
+            if (isValidMoveDraw2(i)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
      * Determines if the move attempted by the current player is valid.
+     *
+     * @param index the index of the card to be determined
      */
     public boolean isValidMove(int index) {
         if (!(index > -1) || !(index < deck.size())) {
@@ -257,7 +305,7 @@ public class Player {
 
         Card c = deck.get(index);
 
-        if (c.getClass().equals(WildCard.class)) { /* wild cards can always be played */
+        if (c.getClass().equals(WildCard.class) || c.getClass().equals(DisarmCard.class)) { /* wild cards can always be played */
             return true;
         }
 
@@ -283,8 +331,11 @@ public class Player {
         return true;
     }
 
-    /*
-     * Determines if the move attempted by the current player is valid.
+
+    /**
+     * Determines if the stacking move attempted by the current player is valid.
+     *
+     * @param index the index of the card to be determined
      */
     public boolean isValidMoveDraw2(int index) {
         if (!(index > -1) || !(index < deck.size())) {
@@ -300,7 +351,8 @@ public class Player {
         return false;
     }
 
-    /*
+
+    /**
      * Gets the number of cards in hand.
      */
     public int deckSize() {
@@ -308,7 +360,7 @@ public class Player {
     }
 
 
-    /*
+    /**
      * Displays cards in hand to the current player.
      */
     public void showHand() {
