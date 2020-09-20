@@ -147,13 +147,7 @@ public class Game {
 
         if (getState(GameState.shouldDisarm).equals(true)) { /* determines if players should disarm */
             for (Player p: players) {
-                ArrayList<Card> deck = p.getPlayerCards();
-                for (int i=deck.size()-1; i>=0; --i) {
-                    Card curr = deck.get(i);
-                    if (curr.getClass().equals(WildCard.class) || curr.getClass().equals(Wild4Card.class)) {
-                        p.discardCard(i);
-                    }
-                }
+                p.disarmCard();
             }
         }
 

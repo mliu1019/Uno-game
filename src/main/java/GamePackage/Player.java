@@ -57,6 +57,7 @@ public class Player {
         name = s;
     }
 
+
     /*
      * Lets the current player declare the color they want to be played next.
      */
@@ -188,7 +189,7 @@ public class Player {
     public void make_stackTurn() throws Exception {
         showHand();
 
-        if (!hasValidMoves(deck)) { /* if there are no available moves, automatically draw the stacked number*/
+        if (!hasValidMovesDraw2(deck)) { /* if there are no available moves, automatically draw the stacked number*/
             int toDraw = (int)g.getState(Game.GameState.nextDraw);
             while (toDraw -- > 0) {
                 draw_card();
@@ -227,6 +228,21 @@ public class Player {
         return;
     }
 
+    /*
+     * Disarm wild cards for the player.
+     */
+    public void disarmCard() {
+
+        for (int i=deck.size()-1; i>=0; --i) {
+            Card curr = deck.get(i);
+            if (curr.getClass().equals(WildCard.class) || curr.getClass().equals(Wild4Card.class)) {
+                discardCard(i);
+            }
+        }
+
+        return;
+    }
+
 
     /*
      * Determines if the current player has any valid moves.
@@ -235,6 +251,20 @@ public class Player {
 
         for (int i=0; i<deck.size(); ++i) {
             if (isValidMove(i)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /*
+     * Determines if the current player has any valid moves.
+     */
+    public boolean hasValidMovesDraw2(ArrayList<Card> deck) {
+
+        for (int i=0; i<deck.size(); ++i) {
+            if (isValidMoveDraw2(i)) {
                 return true;
             }
         }
@@ -253,7 +283,7 @@ public class Player {
 
         Card c = deck.get(index);
 
-        if (c.getClass().equals(WildCard.class)) { /* wild cards can always be played */
+        if (c.getClass().equals(WildCard.class) || c.getClass().equals(DisarmCard.class)) { /* wild cards can always be played */
             return true;
         }
 
