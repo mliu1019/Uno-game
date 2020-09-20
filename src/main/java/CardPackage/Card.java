@@ -34,7 +34,8 @@ public class Card {
      * For all the other cards, the effect is set as displayed as they are.
      */
     public enum Effect {
-        SKIP("Skip"), REVERSE("Reverse"), DRAW2("Draw2"), WILD("Wild"), WILD4("Wild4"), NONE("-");
+        SKIP("Skip"), REVERSE("Reverse"), DRAW2("Draw2"), WILD("Wild"), WILD4("Wild4"),
+        DISARM("Disarm"), NONE("-");
 
         private final String effectString;
 

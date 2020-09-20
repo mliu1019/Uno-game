@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class Game {
     public enum GameState {
-        players, turnRate, shouldStart, shouldEnd, shouldSkip, nextDraw, nextColor, nextNumber, nextEffect, nextPlayer, shouldStack, nextPlayerID
+        players, turnRate, shouldStart, shouldEnd, shouldSkip, nextDraw, nextColor, nextNumber, nextEffect, nextPlayer, shouldStack, shouldDisarm, nextPlayerID
     }
 
     ArrayList<Player> players;
@@ -21,9 +21,10 @@ public class Game {
      */
     private Map<GameState, Object> state = new HashMap<>() {{
         put(GameState.shouldEnd, false); /* if there's a winner and game ends */
-        put(GameState.shouldStart, false); /* if there's a winner and game ends */
+        put(GameState.shouldStart, false); /* if the game starts */
         put(GameState.shouldSkip, false); /* if the next player misses a turn */
-        put(GameState.shouldStack, false); /* if the next player misses a turn */
+        put(GameState.shouldStack, false); /* if the next player should stack */
+        put(GameState.shouldDisarm, false); /* if all players should disarm wild cards */
         put(GameState.nextDraw, 0); /* the number of cards the next player should draw */
         put(GameState.nextColor, Card.Color.NONE); /* the next color on card */
         put(GameState.nextNumber, -1); /* the next number on card */
@@ -64,6 +65,9 @@ public class Game {
                 for (int i=0; i<4; ++i) {
                     drawPile.add(new WildCard());
                     drawPile.add(new Wild4Card());
+                }
+                for (int i=0; i<2; ++i) {
+                    drawPile.add(new DisarmCard());
                 }
             } else {
                 drawPile.add(new NumberCard(0, c));
@@ -141,6 +145,18 @@ public class Game {
      */
     public void turn() throws Exception {
 
+        if (getState(GameState.shouldDisarm).equals(true)) { /* determines if players should disarm */
+            for (Player p: players) {
+                ArrayList<Card> deck = p.getPlayerCards();
+                for (int i=deck.size()-1; i>=0; --i) {
+                    Card curr = deck.get(i);
+                    if (curr.getClass().equals(WildCard.class) || curr.getClass().equals(Wild4Card.class)) {
+                        p.discardCard(i);
+                    }
+                }
+            }
+        }
+
         Player p = players.get((int)getState(GameState.nextPlayer));
 
         if (getState(GameState.shouldStack).equals(true)) { /* determines if player should stack */
@@ -160,6 +176,7 @@ public class Game {
         checkEnding(p);
 
     }
+
 
     /*
      * Checks if the current player has no cards left and game ends.
@@ -198,9 +215,9 @@ public class Game {
      * Sets the state for the next player's turn.
      */
     public void advanceTurn() {
-        int nextp = ((int)getState(GameState.nextPlayer) + (int)getState(GameState.turnRate) + players.size()) % players.size();
-        setState(GameState.nextPlayer, nextp);
-        setState(GameState.nextPlayerID, players.get(nextp).getPlayerID());
+        int nextPlayer = ((int)getState(GameState.nextPlayer) + (int)getState(GameState.turnRate) + players.size()) % players.size();
+        setState(GameState.nextPlayer, nextPlayer);
+        setState(GameState.nextPlayerID, players.get(nextPlayer).getPlayerID());
     }
 
     private Player findPlayer(String pid) {

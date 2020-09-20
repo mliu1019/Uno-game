@@ -30,6 +30,7 @@ public class Player {
         int toDraw = (int) g.getState(Game.GameState.nextDraw);
         while (toDraw --> 0) draw_card();
 
+        g.setState(Game.GameState.shouldDisarm, false);
         g.setState(Game.GameState.shouldSkip, false);
         g.setState(Game.GameState.nextDraw, 0);
 
@@ -100,7 +101,6 @@ public class Player {
         if (lastPlayed.isWildType()) { /* allows player to declare the next color */
             ((WildCard) lastPlayed).setWildColor(nextColor);
         }
-//        c.causeEffect(g);
 
         g.discard(lastPlayed); /* adds card to discard pile */
 
@@ -132,6 +132,12 @@ public class Player {
         return new PlayFeedback(true, "Card " + lastPlayed + " is played.");
     }
 
+
+    public void discardCard(int index) {
+        lastPlayed = deck.remove(index); /* removes card from player's hand */
+        g.discard(lastPlayed); /* adds card to discard pile */
+        return;
+    }
 
     /*
      * Sets a turn for the current player.
