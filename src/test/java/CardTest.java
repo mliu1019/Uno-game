@@ -75,7 +75,6 @@ public class CardTest {
         p.playCard(0);
 
         assertEquals(Card.Color.RED, game.getState(Game.GameState.nextColor));
-        assertEquals(true, game.getState(Game.GameState.shouldSkip));
         assertEquals(2, game.getState(Game.GameState.nextDraw));
     }
 
@@ -103,5 +102,18 @@ public class CardTest {
         assertEquals(Card.Color.NONE, game.getState(Game.GameState.nextColor));
         assertEquals(true, game.getState(Game.GameState.shouldSkip));
         assertEquals(4, game.getState(Game.GameState.nextDraw));
+    }
+
+
+    @Test
+    public void testDisarmCard() throws Exception {
+        game.setState(Game.GameState.nextNumber, 7);
+        game.setState(Game.GameState.nextColor, Card.Color.RED);
+
+        p.addCardsToHand(new DisarmCard());
+        p.playCard(0);
+
+        assertEquals(Card.Color.RED, game.getState(Game.GameState.nextColor));
+        assertEquals(true, game.getState(Game.GameState.shouldDisarm));
     }
 }

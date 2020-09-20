@@ -1,4 +1,5 @@
 import CardPackage.Card;
+import CardPackage.Draw2Card;
 import CardPackage.NumberCard;
 import GamePackage.Game;
 import GamePackage.Player;
@@ -30,13 +31,13 @@ public class GameLogicTest {
         game.discardAll();
 
         assertEquals(0, game.getDrawPileSize());
-        assertEquals(108, game.getDiscardPileSize());
+        assertEquals(110, game.getDiscardPileSize());
 
         for (int i=0; i<5; ++i) { /* moves all cards from the draw pile to form the discard pile */
             p1.draw_card();
         }
 
-        assertEquals(102, game.getDrawPileSize());
+        assertEquals(104, game.getDrawPileSize());
         assertEquals(1, game.getDiscardPileSize());
         // p1.showHand();
     }
@@ -53,5 +54,31 @@ public class GameLogicTest {
         p1.playCard(0);
 
         assertTrue(game.checkEnding(p1));
+    }
+
+
+    /*
+     * This test makes sure that the stacking feature works.
+     */
+    @Test
+    public void testStacking() throws Exception {
+        game.setState(Game.GameState.nextPlayer, 0);
+        game.setState(Game.GameState.nextColor, Card.Color.RED);
+        p1.draw_card();
+        p2.draw_card();
+
+        p1.addCardsToHand(new Draw2Card(Card.Color.RED));
+        p1.playCard(1);
+
+        p2.addCardsToHand(new Draw2Card(Card.Color.GREEN));
+        p2.playCardDraw2(1);
+
+        p1.addCardsToHand(new Draw2Card(Card.Color.BLUE));
+        p1.playCardDraw2(1);
+
+        p2.endTurn();
+
+        assertEquals(0, game.getState(Game.GameState.nextPlayer));
+        assertEquals(7, p2.deckSize());
     }
 }

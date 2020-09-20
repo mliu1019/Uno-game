@@ -154,4 +154,24 @@ public class GameFlowTest {
         assertEquals(5, p1.deckSize());
     }
 
+    /*
+     * This test makes sure that the wild4 card lets the player decide the next color, lets the next player draw 4 cards,
+     * and makes the next player miss a turn.
+     */
+    @Test
+    public void testDisarm() throws Exception {
+        game.setState(Game.GameState.nextPlayer, 0);
+        game.setState(Game.GameState.nextColor, Card.Color.RED);
+
+        p0.addCardsToHand(new DisarmCard());
+        p1.addCardsToHand(new WildCard());
+        p1.addCardsToHand(new Wild4Card());
+
+        p0.playCard(0);
+
+        p1.disarmCard();
+
+        assertEquals(0, p1.deckSize());
+    }
+
 }

@@ -9,7 +9,7 @@ public class GameSetupTest {
     private Player p1, p2;
 
     int NUM_PLAYERS = 2;
-    int NUM_CARDS_TOTAL = 108;
+    int NUM_CARDS_TOTAL = 110;
     int NUM_CARDS_PER_PLAYER = 7;
     int FIRST_HAND = 1;
 
