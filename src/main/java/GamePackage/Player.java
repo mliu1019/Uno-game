@@ -28,12 +28,26 @@ public class Player {
 
     public void endTurn() {
         int toDraw = (int) g.getState(Game.GameState.nextDraw);
-        while (toDraw-- > 0) draw_card();
+        while (toDraw --> 0) draw_card();
 
         g.setState(Game.GameState.shouldSkip, false);
         g.setState(Game.GameState.nextDraw, 0);
 
-        if (lastPlayed != null) lastPlayed.causeEffect(g);
+        if (lastPlayed != null) {
+            lastPlayed.causeEffect(g);
+        }
+
+        g.advanceTurn();
+    }
+
+    public void endStackTurn() {
+        int toDraw = (int) g.getState(Game.GameState.nextDraw);
+        toDraw += 2;
+        g.setState(Game.GameState.nextDraw, toDraw);
+
+        if (lastPlayed != null) {
+            g.setState(Game.GameState.shouldStack, true);
+        }
 
         g.advanceTurn();
     }
@@ -95,6 +109,29 @@ public class Player {
         return new PlayFeedback(true, "Card " + lastPlayed + " is played.");
     }
 
+    /*
+     * Plays a Draw2 card from the current player.
+     *
+     * @param index the index of the card the current player wishes to play
+     */
+    public PlayFeedback playCardDraw2(int index)  {
+        if (!g.getState(Game.GameState.nextPlayer).equals(playerIdx)) {
+            return new PlayFeedback(false, "Not your turn.");
+        }
+
+        if (!isValidMoveDraw2(index)) { /* determines if the card is playable */
+            return new PlayFeedback(false, "Draw2 Move is illegal.");
+        }
+
+        lastPlayed = deck.remove(index); /* removes card from player's hand */
+
+        g.discard(lastPlayed); /* adds card to discard pile */
+
+        endStackTurn();
+
+        return new PlayFeedback(true, "Card " + lastPlayed + " is played.");
+    }
+
 
     /*
      * Sets a turn for the current player.
@@ -137,6 +174,51 @@ public class Player {
                 System.out.println();
             }
         }
+    }
+
+    /*
+     * Sets a turn for the current player.
+     */
+    public void make_stackTurn() throws Exception {
+        showHand();
+
+        if (!hasValidMoves(deck)) { /* if there are no available moves, automatically draw the stacked number*/
+            int toDraw = (int)g.getState(Game.GameState.nextDraw);
+            while (toDraw -- > 0) {
+                draw_card();
+            }
+            return;
+        }
+
+        Scanner cin = new Scanner(System.in);
+
+        System.out.println("Would you like to play a Wild2 card?");
+        boolean wantPlay = cin.nextBoolean(); /* if there are available moves, lets the user decide to play or not to play */
+
+        if (!wantPlay) { /* if player does not want to play, draws a card and play if playable */
+            int toDraw = (int)g.getState(Game.GameState.nextDraw);
+            while (toDraw -- > 0) {
+                draw_card();
+            }
+            return;
+        }
+
+        while (true) { /* if player wants to play, demands for the card to be played */
+            System.out.println("Card (index) to play: ");
+
+            int index = cin.nextInt();
+
+            try {
+                playCardDraw2(index);
+                break;
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+                System.out.println();
+            }
+        }
+
+        return;
     }
 
 
@@ -189,6 +271,23 @@ public class Player {
 
         /* either colors, numbers, or effects match */
         return true;
+    }
+
+    /*
+     * Determines if the move attempted by the current player is valid.
+     */
+    public boolean isValidMoveDraw2(int index) {
+        if (!(index > -1) || !(index < deck.size())) {
+            return false;
+        }
+
+        Card c = deck.get(index);
+
+        if (c.getClass().equals(Draw2Card.class)) { /* only draw2 cards can be played */
+            return true;
+        }
+
+        return false;
     }
 
     /*

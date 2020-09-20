@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class Game {
     public enum GameState {
-        players, turnRate, shouldStart, shouldEnd, shouldSkip, nextDraw, nextColor, nextNumber, nextEffect, nextPlayer, nextPlayerID
+        players, turnRate, shouldStart, shouldEnd, shouldSkip, nextDraw, nextColor, nextNumber, nextEffect, nextPlayer, shouldStack, nextPlayerID
     }
 
     ArrayList<Player> players;
@@ -23,6 +23,7 @@ public class Game {
         put(GameState.shouldEnd, false); /* if there's a winner and game ends */
         put(GameState.shouldStart, false); /* if there's a winner and game ends */
         put(GameState.shouldSkip, false); /* if the next player misses a turn */
+        put(GameState.shouldStack, false); /* if the next player misses a turn */
         put(GameState.nextDraw, 0); /* the number of cards the next player should draw */
         put(GameState.nextColor, Card.Color.NONE); /* the next color on card */
         put(GameState.nextNumber, -1); /* the next number on card */
@@ -32,7 +33,7 @@ public class Game {
         put(GameState.nextPlayerID, "");
     }};
 
-    private int maxNumPlayers = 4;
+    private int maxNumPlayers = 7;
 
     /*
      * Initializes a new game.
@@ -142,15 +143,18 @@ public class Game {
 
         Player p = players.get((int)getState(GameState.nextPlayer));
 
-        int toDraw = (int)getState(GameState.nextDraw);
-        while (toDraw -- > 0) {
-            p.draw_card();
-        }
-
-        if (getState(GameState.shouldSkip).equals(false)) { /* determines if player should skip turn */
-            p.make_turn();
+        if (getState(GameState.shouldStack).equals(true)) { /* determines if player should stack */
+            p.make_stackTurn();
         } else {
-            setState(GameState.shouldSkip, false);
+            int toDraw = (int)getState(GameState.nextDraw);
+            while (toDraw -- > 0) {
+                p.draw_card();
+            }
+            if (getState(GameState.shouldSkip).equals(false)) { /* determines if player should skip turn */
+                p.make_turn();
+            } else {
+                setState(GameState.shouldSkip, false);
+            }
         }
 
         checkEnding(p);
