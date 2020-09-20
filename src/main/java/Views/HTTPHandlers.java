@@ -22,6 +22,11 @@ public class HTTPHandlers {
         cmd.setPlayerID(playerID);
         cmd.setIndex(index);
 
+        startRequest(cmd);
+
+    }
+
+    private static void startRequest(PlayCommand cmd) {
         var objectMapper = new ObjectMapper();
         String requestBody = null;
         try {
@@ -32,6 +37,10 @@ public class HTTPHandlers {
 
         String route = "/game/makeplay";
 
+        makeRequest(requestBody, route);
+    }
+
+    private static void makeRequest(String requestBody, String route) {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .setHeader(HttpHeaders.CONTENT_TYPE, "application/json")
@@ -47,7 +56,6 @@ public class HTTPHandlers {
         }
 
         System.out.println(response.body());
-
     }
 
     public static void setWildAndPlay(String playerID, int index, Card.Color color) {
@@ -57,31 +65,7 @@ public class HTTPHandlers {
         cmd.setIndex(index);
         cmd.setWildColor(color);
 
-        var objectMapper = new ObjectMapper();
-        String requestBody = null;
-        try {
-            requestBody = objectMapper.writeValueAsString(cmd);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        String route = "/game/makeplay";
-
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .setHeader(HttpHeaders.CONTENT_TYPE, "application/json")
-                .uri(URI.create(HOST + route))
-                .PUT(HttpRequest.BodyPublishers.ofString(requestBody))
-                .build();
-
-        HttpResponse<String> response = null;
-        try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(response.body());
+        startRequest(cmd);
     }
 
     public static void drawCard(String playerID) {
@@ -98,21 +82,7 @@ public class HTTPHandlers {
         }
 
         String route = String.format("/game/makeplay");
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .setHeader(HttpHeaders.CONTENT_TYPE, "application/json")
-                .uri(URI.create(HOST + route))
-                .PUT(HttpRequest.BodyPublishers.ofString(requestBody))
-                .build();
-
-        HttpResponse<String> response = null;
-        try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(response.body());
+        makeRequest(requestBody, route);
     }
 
     public static void endPlay(String playerID) {

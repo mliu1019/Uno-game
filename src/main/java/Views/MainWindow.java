@@ -3,9 +3,11 @@ package Views;
 import CardPackage.Card;
 import Models.GameState;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -22,6 +24,8 @@ public class MainWindow extends  JFrame {
 
     JButton drawButton, endButton;
 
+    JButton gameStateButton;
+
     int cardPlayed = -1;
 
     public MainWindow() {
@@ -31,8 +35,6 @@ public class MainWindow extends  JFrame {
             }
         };
         mainCont.setLayout(new OverlayLayout(mainCont));
-
-
 
         notification = new JLabel("");
         mainCont.add(notification);
@@ -53,6 +55,7 @@ public class MainWindow extends  JFrame {
         this.addWindowListener(w);
     }
 
+    /*
     private JPanel initializeLRPanel() {
         JPanel p = new JPanel();
         p.setBackground(Color.RED);
@@ -66,6 +69,7 @@ public class MainWindow extends  JFrame {
         p.add(new JButton("TB"));
         return p;
     }
+    */
 
     private JPanel initializeCenter() {
         JPanel p = new JPanel();
@@ -79,8 +83,6 @@ public class MainWindow extends  JFrame {
 
         JPanel lp = new JPanel();
         lp.setLayout(new BoxLayout(lp, BoxLayout.Y_AXIS));
-        lp.add(new JButton("PREV"));
-        lp.add(new JButton("NEXT"));
 
         cardPanel = new JPanel();
         cardPanel.setLayout(new FlowLayout());
@@ -108,10 +110,12 @@ public class MainWindow extends  JFrame {
         labelNextSymbol = new JLabel();
         labelNextPlayer = new JLabel();
         JPanel p = new JPanel();
-        p.add(labelNextColor);
-        p.add(labelNextNumber);
-        p.add(labelNextSymbol);
-        p.add(labelNextPlayer);
+//        p.add(labelNextColor);
+//        p.add(labelNextNumber);
+//        p.add(labelNextSymbol);
+//        p.add(labelNextPlayer);
+        gameStateButton = new JButton();
+        p.add(gameStateButton);
         return p;
     }
 
@@ -120,16 +124,20 @@ public class MainWindow extends  JFrame {
         p.setPreferredSize(new Dimension(500,500));
         p.setLayout(new BorderLayout());
 
+        /*
         JPanel lp = initializeLRPanel();
         JPanel rp = initializeLRPanel();
         JPanel tp = initializeTBPanel();
+         */
         JPanel bp = initializePlayerPanel();
         JPanel center = initializeCenter();
         center.add(initializeGameStatePanel());
 
+        /*
         p.add(lp, BorderLayout.WEST);
         p.add(rp, BorderLayout.EAST);
         p.add(tp, BorderLayout.NORTH);
+         */
         p.add(bp, BorderLayout.SOUTH);
         p.add(center, BorderLayout.CENTER);
         return p;
@@ -137,24 +145,19 @@ public class MainWindow extends  JFrame {
 
     private JPanel initWildColorPicker() {
         JPanel p = new JPanel();
-        p.setLayout(new BorderLayout());
+        p.setLayout(new GridLayout(4,1));
 
         JButton rb = new JButton("RED"); rb.setBackground(Color.red);
         JButton gb = new JButton("GREEN"); gb.setBackground(Color.green);
         JButton bb = new JButton("BLUE"); bb.setBackground(Color.blue);
         JButton yb = new JButton("YELLOW"); yb.setBackground(Color.yellow);
 
-//        rb.addActionListener(e -> wildColor = Card.Color.RED);
-//        gb.addActionListener(e -> wildColor = Card.Color.GREEN);
-//        bb.addActionListener(e -> wildColor = Card.Color.BLUE);
-//        yb.addActionListener(e -> wildColor = Card.Color.YELLOW);
+        p.add(rb);
+        p.add(gb);
+        p.add(bb);
+        p.add(yb);
 
-        p.add(rb, BorderLayout.NORTH);
-        p.add(gb, BorderLayout.SOUTH);
-        p.add(bb, BorderLayout.EAST);
-        p.add(yb, BorderLayout.WEST);
-
-        p.setMaximumSize(new Dimension(150, 150));
+        p.setMaximumSize(new Dimension(200, 200));
         p.setVisible(false);
         return p;
     }
@@ -206,18 +209,6 @@ public class MainWindow extends  JFrame {
         });
     }
 
-//    public void setDisplayedCards(ArrayList<Card> cards) {
-//        for (int i=0; i<7; ++i) {
-//            Card c = cards.get(i);
-//            System.out.println(c);
-//            if (c.getEffect().equals(Card.Effect.NONE)) {
-//                cardHolders[i].setText(c.getColor() + " " + ((NumberCard) c).getNumber());
-//            } else {
-//                cardHolders[i].setText(c.getColor() + " " + c.getEffect());
-//            }
-//        }
-//    }
-
     public void setDisplayedCards(HashMap<String, Object> payload) {
         ArrayList<HashMap<String,Object>> cards = (ArrayList<HashMap<String, Object>>) payload.get("playerCards");
         cardPanel.removeAll();
@@ -225,15 +216,7 @@ public class MainWindow extends  JFrame {
 
         for (int i=0; i<cards.size(); ++i) {
             HashMap<String, Object> c = cards.get(i);
-            JButton button = new JButton();
-
-            if (c.get("effect").equals("NONE")) {
-                button.setText(c.get("color") + " " + c.get("number"));
-            } else if (c.get("wildType").equals(true)){
-                button.setText((String) c.get("effect"));
-            } else {
-                button.setText(c.get("color") + " " + c.get("effect"));
-            }
+            JButton button = displayCard(c);
 
             cardHolders.add(button);
             int finalI = i;
@@ -256,10 +239,59 @@ public class MainWindow extends  JFrame {
         cardPanel.updateUI();
     }
 
+
+    private JButton displayCard(HashMap<String, Object> c) {
+        JButton button = new JButton();
+
+        String path = "src/resources/images/";
+
+        if (c.get("effect").equals("WILD")) {
+            path += "Wild.png";
+        } else if (c.get("effect").equals("WILD4")) {
+            path += "Wild4.png";
+        } else if (c.get("effect").equals("NONE")) {
+            path += c.get("color") + " " + c.get("number") + ".png";
+        } else {
+            path += c.get("color") + " " + c.get("effect") + ".png";
+        }
+
+        try {
+            Image img = ImageIO.read(new File(path));
+            Image resizedImage = img.getScaledInstance(50, 80, Image.SCALE_DEFAULT);
+            button.setIcon(new ImageIcon(resizedImage));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return button;
+    }
+
     public void setDisplayedGameState(GameState gs) {
-        labelNextSymbol.setText(String.valueOf(gs.getNextEffect()));
-        labelNextNumber.setText(String.valueOf(gs.getNextNumber()));
-        labelNextColor.setText(String.valueOf(gs.getNextColor()));
-        labelNextPlayer.setText(gs.getNextPlayerID());
+
+        String path = "src/resources/images/";
+
+        if (String.valueOf(gs.getNextEffect()).equals("Wild")) {
+            path += "Wild.png";
+        } else if (String.valueOf(gs.getNextEffect()).equals("Wild4")) {
+            path += "Wild4.png";
+        } else if (String.valueOf(gs.getNextEffect()).equals("-")) {
+            path += gs.getNextColor() + " " + String.valueOf(gs.getNextNumber()) + ".png";
+        } else {
+            path += gs.getNextColor() + " " + String.valueOf(gs.getNextEffect()) + ".png";
+        }
+
+        System.out.println(path);
+
+        try {
+            Image img = ImageIO.read(new File(path));
+            Image resizedImage = img.getScaledInstance(50, 80, Image.SCALE_DEFAULT);
+            gameStateButton.setIcon(new ImageIcon(resizedImage));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }
+
+    public static void main(String[] args) {
+        new MainWindow();
     }
 }
