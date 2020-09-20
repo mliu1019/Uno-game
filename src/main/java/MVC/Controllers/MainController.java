@@ -7,7 +7,7 @@ public class MainController {
 
     public MainController() {
         game = new Game();
-        game.setNumPlayers(1);
+        game.setNumPlayers(2);
         game.initDeck();
     }
 }

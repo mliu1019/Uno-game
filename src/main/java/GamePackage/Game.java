@@ -132,7 +132,6 @@ public class Game {
 
                 drawPile.remove(index);
                 discardPile.add(c);
-
                 break; /* set initial state complete */
             }
         }

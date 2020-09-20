@@ -299,7 +299,9 @@ public class MainWindow extends  JFrame {
 
         String path = "src/resources/images/";
 
-        if (c.get("effect").equals("WILD")) {
+        if (c.get("effect").equals("DISARM")) {
+            path += "Disarm.png";
+        } else if (c.get("effect").equals("WILD")) {
             path += "Wild.png";
         } else if (c.get("effect").equals("WILD4")) {
             path += "Wild4.png";
