@@ -29,6 +29,10 @@ public class MainWindow extends  JFrame {
 
     int cardPlayed = -1;
 
+
+    /**
+     * The main window for user interface.
+     */
     public MainWindow() {
         JPanel mainCont = new JPanel() {
             public boolean isOptimizedDrawingEnabled() {
@@ -78,8 +82,9 @@ public class MainWindow extends  JFrame {
         return p;
     }
 
+
     /**
-     * Player Panel including card deck and other functioning buttons
+     * Initialized player panel including card deck and other functioning buttons.
      * @return JPanel
      */
     private JPanel initializePlayerPanel() {
@@ -110,7 +115,7 @@ public class MainWindow extends  JFrame {
     }
 
     /**
-     * Make button unclickable, and unfocusable
+     * Make button unclickable and unfocusable
      * @param button JButton target
      */
     private void voidilizeJButton(JButton button) {
@@ -122,8 +127,9 @@ public class MainWindow extends  JFrame {
         button.setContentAreaFilled(false);
     }
 
+
     /**
-     * JPanel to display current game state, discardPile, and drawPile
+     * Initializes JPanel to display current game state, discardPile, and drawPile.
      * @return JPanel
      */
     public JPanel initializeGameStatePanel() {
@@ -132,10 +138,6 @@ public class MainWindow extends  JFrame {
         labelNextSymbol = new JLabel();
         labelNextPlayer = new JLabel();
         JPanel p = new JPanel();
-//        p.add(labelNextColor);
-//        p.add(labelNextNumber);
-//        p.add(labelNextSymbol);
-//        p.add(labelNextPlayer);
         gameStateButton = new JButton();
         drawPileButton = new JButton();
         voidilizeJButton(gameStateButton);
@@ -152,35 +154,27 @@ public class MainWindow extends  JFrame {
         return p;
     }
 
+
     /**
-     * Main container
+     * Initializes the main container.
      */
     private JPanel initContainer() {
         JPanel p = new JPanel();
         p.setPreferredSize(new Dimension(500,500));
         p.setLayout(new BorderLayout());
 
-        /*
-        JPanel lp = initializeLRPanel();
-        JPanel rp = initializeLRPanel();
-        JPanel tp = initializeTBPanel();
-         */
         JPanel bp = initializePlayerPanel();
         JPanel center = initializeCenter();
         center.add(initializeGameStatePanel());
 
-        /*
-        p.add(lp, BorderLayout.WEST);
-        p.add(rp, BorderLayout.EAST);
-        p.add(tp, BorderLayout.NORTH);
-         */
         p.add(bp, BorderLayout.SOUTH);
         p.add(center, BorderLayout.CENTER);
         return p;
     }
 
+
     /**
-     * Shows up when wildCard is played
+     * Displays a wild color picker.
      */
     private JPanel initWildColorPicker() {
         JPanel p = new JPanel();
@@ -201,8 +195,9 @@ public class MainWindow extends  JFrame {
         return p;
     }
 
+
     /**
-     * Text area to notify game states, ex: when game has ended.
+     * Displays a text area to notify game states, eg. when game has ended.
      * @param text message to display
      */
     public void setDisplayedText(String text) {
@@ -214,8 +209,9 @@ public class MainWindow extends  JFrame {
         notification.setVisible(true);
     }
 
+
     /**
-     * Display userID
+     * Displays userID.
      * @param name userID to display
      */
     public void setDisplayedName(String name) {
@@ -256,8 +252,9 @@ public class MainWindow extends  JFrame {
         });
     }
 
+
     /**
-     * update gui of players deck
+     * Updates player deck GUI.
      * @param payload deck of the current player
      */
     public void setDisplayedCards(HashMap<String, Object> payload) {
@@ -275,7 +272,6 @@ public class MainWindow extends  JFrame {
             button.addActionListener(e -> {
                 cardPlayed = finalI;
                 if (c.get("wildType").equals(true)) {
-//                    setWildPlayer((String) payload.get("playerID"), finalI);
                     wildPanel.setVisible(true);
                 } else {
                     HTTPHandlers.playCard( (String) payload.get("playerID"), this.cardPlayed);
@@ -290,8 +286,9 @@ public class MainWindow extends  JFrame {
         cardPanel.updateUI();
     }
 
+
     /**
-     * display last card played
+     * Displays cards as pictures.
      * @param c card information
      */
     private JButton displayCard(HashMap<String, Object> c) {
@@ -322,6 +319,11 @@ public class MainWindow extends  JFrame {
         return button;
     }
 
+
+    /**
+     * Displays the top of the discard pile.
+     * @param gs current game state
+     */
     public void setDisplayedGameState(GameState gs) {
 
         String path = "src/resources/images/";
