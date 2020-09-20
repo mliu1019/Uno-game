@@ -4,7 +4,7 @@ import GamePackage.Game;
 
 import java.awt.*;
 
-public class DisarmCard extends WildCard {
+public class DisarmCard extends Card {
     public DisarmCard() {
         color = Color.NONE;
         effect = Effect.DISARM;
