@@ -1,4 +1,4 @@
-package Models;
+package MVC.Models;
 
 public class JoinMessage {
     private String name;

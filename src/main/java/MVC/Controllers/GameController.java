@@ -1,4 +1,4 @@
-package Controllers;
+package MVC.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import GamePackage.*;
-import Models.*;
+import MVC.Models.*;
 
 @RestController
 @RequestMapping(path="/game")

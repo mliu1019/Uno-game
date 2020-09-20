@@ -1,7 +1,7 @@
-package Views;
+package MVC.Views;
 
 import CardPackage.Card;
-import Models.GameState;
+import MVC.Models.GameState;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

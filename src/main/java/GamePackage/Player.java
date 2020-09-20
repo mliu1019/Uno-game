@@ -1,7 +1,7 @@
 package GamePackage;
 
 import CardPackage.*;
-import Models.PlayFeedback;
+import MVC.Models.PlayFeedback;
 
 import java.util.ArrayList;
 import java.util.Arrays;

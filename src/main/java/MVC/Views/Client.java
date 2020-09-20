@@ -1,4 +1,4 @@
-package Views;
+package MVC.Views;
 
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.*;
@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import Models.GameState;
-import Models.JoinMessage;
+import MVC.Models.GameState;
+import MVC.Models.JoinMessage;
 
 public class Client {
     private static MainWindow window;

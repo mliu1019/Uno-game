@@ -1,4 +1,4 @@
-package Models;
+package MVC.Models;
 
 public class Card {
     private CardPackage.Card.Color color;

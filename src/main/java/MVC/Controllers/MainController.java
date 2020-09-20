@@ -1,4 +1,4 @@
-package Controllers;
+package MVC.Controllers;
 
 import GamePackage.Game;
 

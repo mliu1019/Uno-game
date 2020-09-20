@@ -1,8 +1,8 @@
 package GamePackage;
 
 import CardPackage.*;
-import Models.PlayCommand;
-import Models.PlayFeedback;
+import MVC.Models.PlayCommand;
+import MVC.Models.PlayFeedback;
 
 import java.util.*;
 import java.util.stream.Collectors;

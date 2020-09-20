@@ -1,4 +1,4 @@
-package Models;
+package MVC.Models;
 
 import CardPackage.Card;
 
