@@ -135,27 +135,6 @@ public class Game {
         return drawPile.remove(0);
     }
 
-
-    /*
-     * Starts the game and enters the game loop.
-     */
-    public void start() {
-        dealFirstHand();
-
-        while (state.get(GameState.shouldEnd).equals(false)) {
-            try {
-                turn();
-                finishTurn();
-            } catch (Exception e) {
-                // TODO: for displaying error messages when implementing GUI
-                System.out.println(e.getMessage());
-            }
-        }
-
-        System.out.println("Game has ended.");
-    }
-
-
     /*
      * Makes a single turn for the current player.
      */
@@ -211,15 +190,6 @@ public class Game {
         }
     }
 
-
-    /*
-     * Finishes the current player's turn.
-     */
-    public void finishTurn() {
-        advanceTurn();
-    }
-
-
     /*
      * Sets the state for the next player's turn.
      */
@@ -236,19 +206,6 @@ public class Game {
             }
         }
         return null;
-    }
-
-    public PlayFeedback playCard(String pid, int index) {
-        for (Player p: players) {
-            if (p.getPlayerID().equals(pid)) {
-                var ret = p.playCard(index);
-                if (ret.isSuccess()) {
-                    finishTurn();
-                }
-                return ret;
-            }
-        }
-        return new PlayFeedback(false, "Player cannot be found.");
     }
 
     public PlayFeedback preCheckGameCondition(Player p) {
@@ -287,12 +244,7 @@ public class Game {
         if(cmd.getCommand().equals(PlayCommand.CMD.WILD)) {
             p.declareNextColor(cmd.getWildColor());
         }
-        var ret = p.playCard(cmd.getIndex());
-        if (ret.isSuccess()) {
-            p.endTurn();
-        }
-
-        return ret;
+        return p.playCard(cmd.getIndex());
     }
 
     public PlayFeedback endPlay(String playerID) {

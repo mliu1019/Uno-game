@@ -44,20 +44,6 @@ public class GameController extends MainController {
         messenger.convertAndSend("/game/players", game.getPlayerNames());
     }
 
-    @RequestMapping(value = "/play/{index}", method = RequestMethod.POST)
-    public PlayFeedback playCard(
-            @PathVariable("index") int index,
-            @RequestParam(name="playerID") String playerID) {
-        return game.playCard(playerID, index);
-    }
-
-    @PutMapping(value = "/wild")
-    public PlayFeedback WildColor(@RequestBody WildCardPlay cp) {
-//        System.out.println("player wild at " + cp.getIndex());
-        game.makeWildColor(cp.getPlayerID(), cp.getColor());
-        return game.playCard(cp.getPlayerID(), cp.getIndex());
-    }
-
     @PutMapping(value = "/makeplay")
     public PlayFeedback MakePlay(@RequestBody PlayCommand cmd) {
         return game.makePlay(cmd);

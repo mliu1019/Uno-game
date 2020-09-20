@@ -7,6 +7,7 @@ public class GameState {
     boolean shouldEnd = false;
     boolean shouldSkip = false;
 
+    String nextPlayerID;
     int nextPlayer = 0;
     int nextNumber = -1;
     Card.Color nextColor = Card.Color.NONE;
@@ -66,5 +67,13 @@ public class GameState {
 
     public void setNextEffect(Card.Effect nextEffect) {
         this.nextEffect = nextEffect;
+    }
+
+    public String getNextPlayerID() {
+        return nextPlayerID;
+    }
+
+    public void setNextPlayerID(String nextPlayerID) {
+        this.nextPlayerID = nextPlayerID;
     }
 }

@@ -33,7 +33,7 @@ public class Player {
         g.setState(Game.GameState.shouldSkip, false);
         g.setState(Game.GameState.nextDraw, 0);
 
-        lastPlayed.causeEffect(g);
+        if (lastPlayed != null) lastPlayed.causeEffect(g);
 
         g.advanceTurn();
     }
@@ -89,6 +89,8 @@ public class Player {
 //        c.causeEffect(g);
 
         g.discard(lastPlayed); /* adds card to discard pile */
+
+        endTurn();
 
         return new PlayFeedback(true, "Card " + lastPlayed + " is played.");
     }

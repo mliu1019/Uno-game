@@ -14,7 +14,7 @@ public class MainWindow extends  JFrame {
     private JLabel playerName;
 
 
-    private JLabel labelNextColor, labelNextNumber, labelNextSymbol;
+    private JLabel labelNextColor, labelNextNumber, labelNextSymbol, labelNextPlayer;
 
     JPanel cardPanel, wildPanel;
 
@@ -106,10 +106,12 @@ public class MainWindow extends  JFrame {
         labelNextColor = new JLabel();
         labelNextNumber = new JLabel();
         labelNextSymbol = new JLabel();
+        labelNextPlayer = new JLabel();
         JPanel p = new JPanel();
         p.add(labelNextColor);
         p.add(labelNextNumber);
         p.add(labelNextSymbol);
+        p.add(labelNextPlayer);
         return p;
     }
 
@@ -258,5 +260,6 @@ public class MainWindow extends  JFrame {
         labelNextSymbol.setText(String.valueOf(gs.getNextEffect()));
         labelNextNumber.setText(String.valueOf(gs.getNextNumber()));
         labelNextColor.setText(String.valueOf(gs.getNextColor()));
+        labelNextPlayer.setText(gs.getNextPlayerID());
     }
 }

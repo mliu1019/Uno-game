@@ -5,6 +5,7 @@ public class PlayFeedback {
     String message = "";
 
     public PlayFeedback() {}
+
     public PlayFeedback(boolean suc, String msg) {
         success = suc;
         message = msg;
