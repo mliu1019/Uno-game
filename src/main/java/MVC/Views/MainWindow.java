@@ -13,10 +13,8 @@ import java.util.HashMap;
 
 public class MainWindow extends  JFrame {
     private JLabel notification;
+    private JButton status;
     private JLabel playerName;
-
-
-    private JLabel labelNextColor, labelNextNumber, labelNextSymbol, labelNextPlayer;
 
     JPanel cardPanel, wildPanel;
 
@@ -29,6 +27,7 @@ public class MainWindow extends  JFrame {
 
     int cardPlayed = -1;
 
+    private String playerID;
 
     /**
      * The main window for user interface.
@@ -39,20 +38,30 @@ public class MainWindow extends  JFrame {
                 return false;
             }
         };
+        setSize(1600, 900);
+
         mainCont.setLayout(new OverlayLayout(mainCont));
+        mainCont.setPreferredSize(new Dimension(1600, 900));
+        mainCont.setBackground(Color.DARK_GRAY);
 
-        notification = new JLabel("");
-        mainCont.add(notification);
-
+//        Insets insets = mainCont.getInsets();
+//        Dimension size = mainCont.getPreferredSize();
+//
         wildPanel = initWildColorPicker();
         mainCont.add(wildPanel);
 
+        JPanel info = infoPanel();
+        mainCont.add(info);
+
         JPanel myPanel = initContainer();
+        myPanel.setBackground(Color.DARK_GRAY);
         mainCont.add(myPanel);
 
+
+
         add(mainCont, BorderLayout.CENTER);
+
         setVisible(true);
-        setSize(1080, 720);
         setLocationRelativeTo(null);
     }
 
@@ -82,6 +91,25 @@ public class MainWindow extends  JFrame {
         return p;
     }
 
+    private JPanel infoPanel() {
+        JPanel p = new JPanel();
+        p.setLayout(new BorderLayout());
+        p.setMaximumSize(new Dimension(200, 400));
+//        p.setBackground(Color.WHITE);
+        JPanel p2 = new JPanel();
+
+        status = new JButton();
+        status.setVisible(false);
+        voidilizeJButton(status);
+
+        p2.add(status);
+        p.add(p2, BorderLayout.SOUTH);
+
+        notification = new JLabel();
+        p.add(notification, BorderLayout.CENTER);
+
+        return p;
+    }
 
     /**
      * Initialized player panel including card deck and other functioning buttons.
@@ -133,10 +161,6 @@ public class MainWindow extends  JFrame {
      * @return JPanel
      */
     public JPanel initializeGameStatePanel() {
-        labelNextColor = new JLabel();
-        labelNextNumber = new JLabel();
-        labelNextSymbol = new JLabel();
-        labelNextPlayer = new JLabel();
         JPanel p = new JPanel();
         gameStateButton = new JButton();
         drawPileButton = new JButton();
@@ -165,7 +189,7 @@ public class MainWindow extends  JFrame {
 
         JPanel bp = initializePlayerPanel();
         JPanel center = initializeCenter();
-        center.add(initializeGameStatePanel());
+        center.add(initializeGameStatePanel(), BorderLayout.NORTH);
 
         p.add(bp, BorderLayout.SOUTH);
         p.add(center, BorderLayout.CENTER);
@@ -215,6 +239,7 @@ public class MainWindow extends  JFrame {
      * @param name userID to display
      */
     public void setDisplayedName(String name) {
+        playerID = name;
         playerName.setText(name.substring(0, 8));
 
         for (Component c : wildPanel.getComponents()) {
@@ -253,19 +278,23 @@ public class MainWindow extends  JFrame {
     }
 
 
+
     /**
      * Updates player deck GUI.
      * @param payload deck of the current player
      */
     public void setDisplayedCards(HashMap<String, Object> payload) {
         ArrayList<HashMap<String,Object>> cards = (ArrayList<HashMap<String, Object>>) payload.get("playerCards");
+        System.out.println(cards);
         cardPanel.removeAll();
         cardHolders.clear();
 
         for (int i=0; i<cards.size(); ++i) {
             HashMap<String, Object> c = cards.get(i);
             JButton button = displayCard(c);
-
+            if (c.get("playable").equals(false)) {
+                voidilizeJButton(button);
+            }
             cardHolders.add(button);
             int finalI = i;
 
@@ -325,7 +354,6 @@ public class MainWindow extends  JFrame {
      * @param gs current game state
      */
     public void setDisplayedGameState(GameState gs) {
-
         String path = "src/resources/images/";
 
         if (String.valueOf(gs.getNextEffect()).equals("Disarm")) {
@@ -340,8 +368,6 @@ public class MainWindow extends  JFrame {
             path += gs.getNextColor() + " " + String.valueOf(gs.getNextEffect()) + ".png";
         }
 
-        System.out.println(path);
-
         try {
             Image img = ImageIO.read(new File(path));
             Image resizedImage = img.getScaledInstance(50, 80, Image.SCALE_DEFAULT);
@@ -352,6 +378,27 @@ public class MainWindow extends  JFrame {
 
         gameStateButton.setText(String.valueOf(gs.getDiscardPileSize()));
         drawPileButton.setText(String.valueOf(gs.getDrawPileSize()));
+
+        if (gs.getNextPlayerID().equals(playerID)) {
+            if (gs.getShouldSkip()) {
+                setButtonImage(status, "skipped.jpg", 50, 50);
+            } else {
+                setButtonImage(status, "clock.jpg", 50, 50);
+            }
+        } else {
+            status.setVisible(false);
+        }
+    }
+
+    private void setButtonImage(JButton button, String file, int w, int h) {
+        try {
+            Image img = ImageIO.read(new File("src/resources/images/" + file));
+            Image resizedImage = img.getScaledInstance(w, h, Image.SCALE_DEFAULT);
+            button.setIcon(new ImageIcon(resizedImage));
+            button.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

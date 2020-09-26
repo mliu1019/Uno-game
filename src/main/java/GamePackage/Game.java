@@ -135,7 +135,6 @@ public class Game {
                 break; /* set initial state complete */
             }
         }
-
         setState(GameState.nextPlayerID, players.get(0).getPlayerID());
     }
 

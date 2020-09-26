@@ -390,6 +390,13 @@ public class Player {
     public String getPlayerID() { return playerID; }
 
     public ArrayList<Card> getPlayerCards() {
+        for (int i=0; i<deck.size(); ++i) {
+            if (isValidMove(i)) {
+                deck.get(i).playable = true;
+            } else {
+                deck.get(i).playable = false;
+            }
+        }
         return deck;
     }
 

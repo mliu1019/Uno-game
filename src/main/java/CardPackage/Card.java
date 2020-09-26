@@ -55,6 +55,8 @@ public class Card {
     protected Color color = Color.NONE;
     protected Effect effect = Effect.NONE;
 
+    public boolean playable = false;
+
     public Card() { }
 
     public Card(Effect e, Color c) {
