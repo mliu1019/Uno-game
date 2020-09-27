@@ -5,6 +5,7 @@ import CardPackage.*;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+
 public class AI extends Player {
     public AI(Game game, String id) {
         super(game, id);
@@ -27,7 +28,7 @@ public class AI extends Player {
             return;
         }
 
-        int index = selectCard(deck);
+        int index = selectCard();
         playCard(index);
 
         }
@@ -48,17 +49,16 @@ public class AI extends Player {
             return;
         }
 
-        int index = selectCard(deck);
+        int index = selectCard();
         playCard(index);
     }
 
 
     /**
      * Lets the AI decide which card to play
-     * @param deck the current hand of the AI
      * @return the index of the card AI decides to play
      */
-    private int selectCard(ArrayList<Card> deck) {
+    public int selectCard() {
 
         ArrayList<Integer> playableCards = new ArrayList<>();;
         for (int i=0; i<deck.size(); ++i) {

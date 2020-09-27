@@ -340,6 +340,14 @@ public class Game {
 
 
     /**
+     * Adds card to the draw pile.
+     */
+    public void addToDiscardPile(Card c) {
+        discardPile.add(c);
+    }
+
+
+    /**
      * Returns the draw pile.
      */
     public ArrayList<Card> getDiscardPile() {
