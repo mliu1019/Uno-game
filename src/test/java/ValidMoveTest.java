@@ -1,6 +1,5 @@
 import CardPackage.*;
 import GamePackage.*;
-import UtilPackage.Uno;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -91,7 +90,7 @@ public class ValidMoveTest {
 
         p1.addCardsToHand(new NumberCard(1, Card.Color.GREEN));
 
-        p1.make_turn();
+        p1.makeTurn();
 
         assertEquals(1, p1.deckSize());
     }
@@ -110,7 +109,7 @@ public class ValidMoveTest {
 
         p1.addCardsToHand(new NumberCard(1, Card.Color.GREEN));
 
-        p1.make_turn();
+        p1.makeTurn();
 
         assertEquals(2, p1.deckSize());
     }

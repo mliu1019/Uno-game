@@ -31,9 +31,9 @@ public class GameFlowTest {
         game.setState(Game.GameState.nextPlayer, 0);
         game.setState(Game.GameState.nextColor, Card.Color.RED);
 
-        p0.addCardsToHand(new NumberCard(1, Card.Color.RED));
-        p1.addCardsToHand(new NumberCard(2, Card.Color.RED));
-        p2.addCardsToHand(new NumberCard(3, Card.Color.RED));
+        p0.addCardsToHand(new NumberCard(1, Card.Color.RED), new NumberCard(1, Card.Color.BLUE));
+        p1.addCardsToHand(new NumberCard(2, Card.Color.RED), new NumberCard(2, Card.Color.BLUE));
+        p2.addCardsToHand(new NumberCard(3, Card.Color.RED), new NumberCard(3, Card.Color.BLUE));
 
         p0.playCard(0);
         assertEquals(1, game.getState(Game.GameState.nextPlayer));
@@ -54,9 +54,9 @@ public class GameFlowTest {
         game.setState(Game.GameState.nextPlayer, 0);
         game.setState(Game.GameState.nextColor, Card.Color.RED);
 
-        p0.addCardsToHand(new SkipCard(Card.Color.RED));
-        p1.addCardsToHand(new NumberCard(1, Card.Color.RED));
-        p2.addCardsToHand(new SkipCard(Card.Color.RED));
+        p0.addCardsToHand(new SkipCard(Card.Color.RED), new WildCard());
+        p1.addCardsToHand(new NumberCard(1, Card.Color.RED), new WildCard());
+        p2.addCardsToHand(new SkipCard(Card.Color.RED), new WildCard());
 
         p0.playCard(0);
 
@@ -80,12 +80,12 @@ public class GameFlowTest {
         game.setState(Game.GameState.nextPlayer, 0);
         game.setState(Game.GameState.nextColor, Card.Color.RED);
 
-        p0.addCardsToHand(new ReverseCard(Card.Color.RED));
+        p0.addCardsToHand(new ReverseCard(Card.Color.RED), new WildCard());
         p0.playCard(0);
 
         assertEquals(2, game.getState(Game.GameState.nextPlayer));
 
-        p2.addCardsToHand(new ReverseCard(Card.Color.RED));
+        p2.addCardsToHand(new ReverseCard(Card.Color.RED), new WildCard());
         p2.playCard(0);
 
         assertEquals(0, game.getState(Game.GameState.nextPlayer));
@@ -100,13 +100,14 @@ public class GameFlowTest {
         game.setState(Game.GameState.nextPlayer, 0);
         game.setState(Game.GameState.nextColor, Card.Color.RED);
 
-        p0.addCardsToHand(new Draw2Card(Card.Color.RED));
+        p0.addCardsToHand(new Draw2Card(Card.Color.RED), new WildCard());
         p0.playCard(0);
 
+        p1.addCardsToHand(new WildCard());
         p1.endTurn();
 
         assertEquals(2, game.getState(Game.GameState.nextPlayer));
-        assertEquals(2, p1.deckSize());
+        assertEquals(3, p1.deckSize());
     }
 
 
@@ -118,8 +119,8 @@ public class GameFlowTest {
         game.setState(Game.GameState.nextPlayer, 0);
         game.setState(Game.GameState.nextColor, Card.Color.RED);
 
-        p0.addCardsToHand(new WildCard());
-        p1.addCardsToHand(new NumberCard(1, Card.Color.GREEN));
+        p0.addCardsToHand(new WildCard(), new WildCard());
+        p1.addCardsToHand(new NumberCard(1, Card.Color.GREEN), new WildCard());
 
         assertFalse(p2.isValidMove(0));
 
@@ -139,8 +140,8 @@ public class GameFlowTest {
         game.setState(Game.GameState.nextPlayer, 0);
         game.setState(Game.GameState.nextColor, Card.Color.RED);
 
-        p0.addCardsToHand(new Wild4Card());
-        p1.addCardsToHand(new NumberCard(1, Card.Color.RED));
+        p0.addCardsToHand(new Wild4Card(), new WildCard());
+        p1.addCardsToHand(new NumberCard(1, Card.Color.RED), new WildCard());
 
         p0.declareNextColor(Card.Color.GREEN);
         p0.playCard(0);
@@ -151,7 +152,7 @@ public class GameFlowTest {
         assertEquals(Card.Color.GREEN, game.getState(Game.GameState.nextColor));
         assertEquals(2, game.getState(Game.GameState.nextPlayer));
 
-        assertEquals(5, p1.deckSize());
+        assertEquals(6, p1.deckSize());
     }
 
     /*
