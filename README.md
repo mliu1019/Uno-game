@@ -28,7 +28,7 @@ By Default, Uno game allows two players. When two instances of client are runnin
 
 ## Test 
 
-* `mvn test"`
+* `mvn test`
   * The command runs all tests inside test resource directory.
 
 ### Resources:
