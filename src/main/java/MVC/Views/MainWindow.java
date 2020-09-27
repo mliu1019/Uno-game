@@ -44,9 +44,6 @@ public class MainWindow extends  JFrame {
         mainCont.setPreferredSize(new Dimension(1600, 900));
         mainCont.setBackground(Color.DARK_GRAY);
 
-//        Insets insets = mainCont.getInsets();
-//        Dimension size = mainCont.getPreferredSize();
-//
         wildPanel = initWildColorPicker();
         mainCont.add(wildPanel);
 
@@ -68,22 +65,6 @@ public class MainWindow extends  JFrame {
     public void addCallback(WindowAdapter w) {
         this.addWindowListener(w);
     }
-
-    /*
-    private JPanel initializeLRPanel() {
-        JPanel p = new JPanel();
-        p.setBackground(Color.RED);
-        p.add(new JButton("LR"));
-        return p;
-    }
-
-    private JPanel initializeTBPanel() {
-        JPanel p = new JPanel();
-        p.setBackground(Color.BLUE);
-        p.add(new JButton("TB"));
-        return p;
-    }
-    */
 
     private JPanel initializeCenter() {
         JPanel p = new JPanel();

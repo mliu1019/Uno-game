@@ -8,11 +8,11 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Player {
-    private String name = "default";
-    private Game g;
-    private ArrayList<Card> deck;
-    private int playerIdx;
-    private String playerID;
+    protected String name = "default";
+    protected Game g;
+    protected ArrayList<Card> deck;
+    protected int playerIdx;
+    protected String playerID;
 
     private Card.Color nextColor = Card.Color.NONE; // By default
 
@@ -156,7 +156,7 @@ public class Player {
     /**
      * Sets a turn for the current player.
      */
-    public void make_turn() throws Exception {
+    public void makeTurn() throws Exception {
         showHand();
 
         if (!hasValidMoves(deck)) { /* if there are no available moves, automatically draws a card*/

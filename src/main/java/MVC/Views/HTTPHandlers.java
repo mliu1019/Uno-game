@@ -16,6 +16,7 @@ import java.net.http.HttpResponse;
 public class HTTPHandlers {
     private static final String HOST = "http://127.0.0.1:8080";
 
+
     public static void playCard(String playerID, int index) {
         PlayCommand cmd = new PlayCommand();
         cmd.setCommand(PlayCommand.CMD.PLAY);
@@ -25,6 +26,7 @@ public class HTTPHandlers {
         startRequest(cmd);
 
     }
+
 
     private static void startRequest(PlayCommand cmd) {
         var objectMapper = new ObjectMapper();
@@ -39,6 +41,7 @@ public class HTTPHandlers {
 
         makeRequest(requestBody, route);
     }
+
 
     private static void makeRequest(String requestBody, String route) {
         HttpClient client = HttpClient.newHttpClient();
@@ -58,6 +61,7 @@ public class HTTPHandlers {
         System.out.println(response.body());
     }
 
+
     public static void setWildAndPlay(String playerID, int index, Card.Color color) {
         PlayCommand cmd = new PlayCommand();
         cmd.setCommand(PlayCommand.CMD.WILD);
@@ -67,6 +71,7 @@ public class HTTPHandlers {
 
         startRequest(cmd);
     }
+
 
     public static void drawCard(String playerID) {
         PlayCommand cmd = new PlayCommand();
@@ -84,6 +89,7 @@ public class HTTPHandlers {
         String route = String.format("/game/makeplay");
         makeRequest(requestBody, route);
     }
+
 
     public static void endPlay(String playerID) {
         String route = String.format("/game/endplay?playerID=%s", playerID);

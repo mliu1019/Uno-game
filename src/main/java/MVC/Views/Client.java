@@ -72,9 +72,6 @@ public class Client {
 
             window.setDisplayedName(sessionID);
             window.setDisplayedCards(map);
-//            Player p = (Player) payload;
-//            window.setDisplayedName(p.getPlayerID());
-//            window.setDisplayedCards(p.getPlayerCards());
             session.subscribe("/deck/" + sessionID, new playerDeckHandler());
         }
     }

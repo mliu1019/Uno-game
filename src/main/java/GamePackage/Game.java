@@ -169,7 +169,7 @@ public class Game {
                 p.draw_card();
             }
             if (getState(GameState.shouldSkip).equals(false)) { /* determines if player should skip turn */
-                p.make_turn();
+                p.makeTurn();
             } else {
                 setState(GameState.shouldSkip, false);
             }
@@ -340,6 +340,14 @@ public class Game {
 
 
     /**
+     * Returns the draw pile.
+     */
+    public ArrayList<Card> getDiscardPile() {
+        return discardPile;
+    }
+
+
+    /**
      * Returns the number of cards in the draw pile.
      */
     public int getDiscardPileSize() {
@@ -375,6 +383,8 @@ public class Game {
         setState(GameState.discardPileSize, discardPile.size());
         return state;
     }
+
+
 
     /**
      * Gets the number of cards discarded.
