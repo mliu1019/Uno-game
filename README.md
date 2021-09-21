@@ -1,6 +1,6 @@
-# FA20 CS242 Assignment 1
+# Uno Game
 
-Assignment 1 of CS 242 Class Fall 2020. The assignment implements game of Uno. The current version is implemented in Java 14.
+The project implements game of Uno. The current version is implemented in Java 14.
 
 ## Tool
 * [Maven](https://maven.apache.org/download.cgi)  >=3.2
@@ -32,4 +32,4 @@ By Default, Uno game allows two players. When two instances of client are runnin
   * The command runs all tests inside test resource directory.
 
 ### Resources:
-- [Repo](https://gitlab.engr.illinois.edu/minerl2/fa20-cs242-assignment1)
+- [Repo](https://github.com/mliu1019/Uno-game)
